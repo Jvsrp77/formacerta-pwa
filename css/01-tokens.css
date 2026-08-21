@@ -1,0 +1,51 @@
+/* ============================================================
+   01 — TOKENS DE DESIGN
+   Variáveis de cor, tipografia e raios + reset global.
+   Precisa ser o PRIMEIRO arquivo carregado: todos os outros
+   consomem as variáveis declaradas aqui.
+   ============================================================ */
+
+:root {
+  --bg: #07090c;
+  --bg-surface: #0e1219;
+  --panel: #131924;
+  --panel-border: #1f2a3e;
+  --panel-hover: #192233;
+
+  --text: #f0f4f8;
+  --muted: #8292a6;
+  --muted-dark: #485668;
+
+  --accent: #c8ff4d;      /* Lime Cyber Neon */
+  --accent-glow: rgba(200, 255, 77, 0.25);
+  --cyan: #00f2fe;        /* Cyan HUD */
+  --cyan-glow: rgba(0, 242, 254, 0.25);
+  --bad: #ff3b5c;         /* Crimson Error */
+  --bad-bg: rgba(255, 59, 92, 0.12);
+  --warn: #ffb84d;        /* Orange Warning */
+  --warn-bg: rgba(255, 184, 77, 0.12);
+  --good-bg: rgba(200, 255, 77, 0.12);
+
+  --font-main: 'Plus Jakarta Sans', -apple-system, sans-serif;
+  --font-mono: 'JetBrains Mono', monospace;
+  --radius-sm: 8px;
+  --radius-md: 14px;
+  --radius-lg: 20px;
+  --shadow: 0 12px 32px rgba(0, 0, 0, 0.45);
+}
+
+* { box-sizing: border-box; margin: 0; padding: 0; }
+
+body {
+  background-color: var(--bg);
+  color: var(--text);
+  font-family: var(--font-main);
+  min-height: 100vh;
+  padding-bottom: 60px;
+  overflow-x: hidden;
+  background-image:
+    radial-gradient(circle at 15% 10%, rgba(200, 255, 77, 0.04) 0%, transparent 40%),
+    radial-gradient(circle at 85% 60%, rgba(0, 242, 254, 0.04) 0%, transparent 40%);
+}
+
+@keyframes fadeIn { from { opacity: 0; transform: translateY(6px); } to { opacity: 1; transform: translateY(0); } }

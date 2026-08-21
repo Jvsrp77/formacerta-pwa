@@ -1,0 +1,147 @@
+/* ============================================================
+   04 — ABA "ANÁLISE AO VIVO"
+   Palco do vídeo, HUD sobreposto, caixas de métrica, gráfico
+   de trajetória angular, visualizador 3D, mapa muscular e a
+   interface do Modo Circuito.
+   ============================================================ */
+
+/* ---------- Palco do vídeo ---------- */
+.stage-container {
+  background: var(--panel);
+  border: 1px solid var(--panel-border);
+  border-radius: var(--radius-lg);
+  overflow: hidden; position: relative;
+  aspect-ratio: 16/9; box-shadow: var(--shadow);
+  display: flex; align-items: center; justify-content: center;
+}
+
+video, canvas.overlay-canvas { position: absolute; top: 0; left: 0; width: 100%; height: 100%; object-fit: contain; }
+.flipped { transform: scaleX(-1); }
+
+.stage-placeholder {
+  display: flex; flex-direction: column; align-items: center; justify-content: center;
+  gap: 16px; color: var(--muted); text-align: center; padding: 30px; z-index: 5;
+}
+.stage-placeholder-icon {
+  width: 64px; height: 64px; border-radius: 50%;
+  background: var(--bg-surface); border: 1px solid var(--panel-border);
+  display: flex; align-items: center; justify-content: center; color: var(--accent);
+}
+.stage-placeholder-title { font-weight: 700; color: var(--text); font-size: 16px; margin-bottom: 6px; }
+.stage-placeholder-hint { font-size: 13px; }
+
+/* ---------- HUD sobreposto ---------- */
+.hud-top-bar {
+  position: absolute; top: 16px; left: 16px; right: 16px;
+  display: flex; justify-content: space-between; align-items: center;
+  pointer-events: none; z-index: 10;
+}
+.hud-badge {
+  background: rgba(7, 9, 12, 0.75); backdrop-filter: blur(8px);
+  border: 1px solid rgba(255, 255, 255, 0.1); padding: 6px 12px;
+  border-radius: 20px; font-family: var(--font-mono); font-size: 12px;
+  color: var(--accent); display: flex; align-items: center; gap: 6px;
+}
+.hud-badge .dot { width: 8px; height: 8px; border-radius: 50%; background: var(--accent); box-shadow: 0 0 8px var(--accent); }
+.hud-badge.offline .dot { background: var(--muted); box-shadow: none; }
+.hud-badge.recording .dot { background: var(--bad); box-shadow: 0 0 8px var(--bad); animation: blink 1s infinite; }
+.hud-badge.cyan { color: var(--cyan); }
+@keyframes blink { 50% { opacity: 0.3; } }
+
+/* ---------- Controles do vídeo carregado (MP4) ---------- */
+.video-controls {
+  position: absolute; bottom: 16px; left: 16px; right: 16px;
+  background: rgba(7, 9, 12, 0.85); backdrop-filter: blur(8px);
+  border: 1px solid var(--panel-border); border-radius: 12px;
+  padding: 10px 16px; display: flex; align-items: center; gap: 14px; z-index: 10;
+}
+.video-controls input[type=range] { flex: 1; accent-color: var(--accent); cursor: pointer; }
+.video-controls .btn { padding: 4px 10px; font-size: 12px; }
+.video-time { font-family: var(--font-mono); font-size: 11px; color: var(--muted); }
+
+/* ---------- Caixas de métrica ---------- */
+.metric-box-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 14px; }
+.metric-box-grid.spaced { margin-top: 12px; }
+.metric-box { background: var(--bg-surface); border: 1px solid var(--panel-border); border-radius: 10px; padding: 12px; }
+.metric-box .lbl { font-size: 10.5px; color: var(--muted); font-family: var(--font-mono); text-transform: uppercase; margin-bottom: 3px; }
+.metric-box .val { font-family: var(--font-mono); font-size: 22px; font-weight: 700; color: var(--text); }
+.metric-box .val.highlight { color: var(--accent); }
+.metric-box .val.cyan { color: var(--cyan); }
+.metric-box .val.sm { font-size: 18px; margin-top: 4px; }
+.metric-box .val.xs { font-size: 16px; margin-top: 4px; }
+.metric-box .val.posture { font-size: 14px; margin-top: 4px; color: var(--accent); }
+.metric-box.wide { grid-column: span 2; }
+
+/* ---------- Contador de repetições ---------- */
+.rep-counter-row {
+  display: grid; grid-template-columns: 1fr 1fr; gap: 10px;
+  background: var(--bg-surface); border: 1px solid var(--panel-border);
+  border-radius: 12px; padding: 14px; text-align: center;
+}
+.rep-val { font-family: var(--font-mono); font-size: 32px; font-weight: 800; line-height: 1; }
+.rep-val.valid { color: var(--accent); }
+.rep-val.invalid { color: var(--bad); }
+.rep-lbl { font-size: 10px; color: var(--muted); text-transform: uppercase; letter-spacing: 0.08em; margin-top: 4px; font-weight: 600; }
+
+/* ---------- Gráfico de trajetória angular ---------- */
+.graph-container { margin-top: 12px; background: var(--bg-surface); border: 1px solid var(--panel-border); border-radius: 10px; padding: 10px; }
+.graph-header { display: flex; justify-content: space-between; font-size: 10.5px; font-family: var(--font-mono); color: var(--muted); margin-bottom: 6px; }
+canvas.sparkline-canvas { width: 100%; height: 50px; display: block; }
+
+/* ---------- Visualizador 3D ---------- */
+canvas.canvas-3d {
+  width: 100%; height: 220px;
+  background: var(--bg-surface);
+  border: 1px solid var(--panel-border);
+  border-radius: 10px;
+  display: block;
+}
+.rotation-control { display: flex; align-items: center; gap: 10px; margin-top: 8px; }
+.rotation-control label { font-size: 11px; color: var(--muted); font-family: var(--font-mono); }
+.rotation-control input[type=range] { flex: 1; accent-color: var(--accent); }
+
+/* ---------- Mapa de solicitação muscular ---------- */
+.muscle-map-container {
+  display: grid; grid-template-columns: repeat(2, 1fr); gap: 8px; margin-top: 10px;
+}
+.muscle-badge {
+  background: var(--bg-surface); border: 1px solid var(--panel-border);
+  padding: 8px 10px; border-radius: 8px; font-size: 11px;
+  display: flex; align-items: center; justify-content: space-between;
+  transition: all 0.2s ease;
+}
+.muscle-badge.active { background: rgba(200, 255, 77, 0.15); border-color: var(--accent); color: var(--accent); }
+.muscle-badge .dot { width: 8px; height: 8px; border-radius: 50%; background: var(--muted-dark); }
+.muscle-badge.active .dot { background: var(--accent); box-shadow: 0 0 6px var(--accent); }
+
+/* ---------- Modo Circuito: montagem ---------- */
+#circuitBuilderCard { margin-bottom: 20px; }
+.circuit-add-btn { font-size: 12.5px; padding: 8px 14px; margin-top: 12px; }
+.circuit-step-row { display: flex; align-items: center; gap: 10px; padding: 10px 0; border-bottom: 1px solid var(--panel-border); }
+.circuit-step-row:last-child { border-bottom: none; }
+.circuit-step-num { font-family: var(--font-mono); font-size: 12px; color: var(--muted); width: 18px; flex-shrink: 0; }
+.circuit-step-row select { flex: 1; font-family: var(--font-main); font-size: 13.5px; font-weight: 600; background: var(--bg-surface); color: var(--text); border: 1px solid var(--panel-border); border-radius: var(--radius-sm); padding: 8px 10px; }
+.circuit-step-reps-wrap { display: flex; align-items: center; gap: 6px; flex-shrink: 0; }
+.circuit-step-reps-wrap span { font-size: 11px; color: var(--muted); font-family: var(--font-mono); }
+.circuit-step-row input[type=number] { width: 60px; background: var(--bg-surface); color: var(--text); border: 1px solid var(--panel-border); padding: 8px; border-radius: var(--radius-sm); font-family: var(--font-mono); text-align: center; }
+.circuit-step-remove { background: transparent; border: none; color: var(--muted); cursor: pointer; font-size: 15px; padding: 4px 8px; flex-shrink: 0; }
+.circuit-step-remove:hover { color: var(--bad); }
+
+/* ---------- Modo Circuito: progresso ---------- */
+.circuit-progress-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px; }
+.circuit-progress-header .btn { font-size: 11px; padding: 4px 10px; }
+.circuit-progress-item { display: flex; align-items: center; justify-content: space-between; padding: 8px 10px; border-radius: 8px; font-size: 12.5px; margin-bottom: 6px; background: var(--bg-surface); border: 1px solid var(--panel-border); color: var(--muted); }
+.circuit-progress-item.active { border-color: var(--accent); color: var(--text); background: rgba(200, 255, 77, 0.08); }
+.circuit-progress-item.done { color: var(--accent); }
+.circuit-progress-item .badge { font-family: var(--font-mono); font-size: 11px; }
+
+/* ---------- Modo Circuito: overlay de descanso ---------- */
+.rest-overlay {
+  position: absolute; inset: 0; z-index: 20;
+  background: rgba(7, 9, 12, 0.92); backdrop-filter: blur(6px);
+  display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 10px;
+  text-align: center; padding: 20px;
+}
+.rest-overlay-label { font-family: var(--font-mono); font-size: 12px; letter-spacing: 0.1em; color: var(--muted); text-transform: uppercase; }
+.rest-overlay-exercise { font-size: 22px; font-weight: 800; color: var(--text); }
+.rest-overlay-countdown { font-family: var(--font-mono); font-size: 64px; font-weight: 800; color: var(--accent); line-height: 1; margin: 4px 0; }
