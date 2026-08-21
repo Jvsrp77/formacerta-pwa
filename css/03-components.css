@@ -1,0 +1,104 @@
+/* ============================================================
+   03 — COMPONENTES REUTILIZÁVEIS
+   Peças usadas em mais de uma aba: botões, selects, cards,
+   painéis, switches, tabelas e o toast de notificação.
+   ============================================================ */
+
+/* ---------- Formulário ---------- */
+select {
+  font-family: var(--font-main); font-size: 14px; font-weight: 600;
+  background: var(--bg-surface); color: var(--text);
+  border: 1px solid var(--panel-border); border-radius: var(--radius-sm);
+  padding: 10px 14px; cursor: pointer; outline: none;
+}
+
+.file-input-wrapper { position: relative; overflow: hidden; display: inline-block; }
+.file-input-wrapper input[type=file] { position: absolute; left: 0; top: 0; opacity: 0; font-size: 100px; cursor: pointer; }
+
+/* ---------- Botões ---------- */
+.btn {
+  font-family: var(--font-main); font-weight: 700; font-size: 13.5px;
+  border: none; border-radius: var(--radius-sm); padding: 10px 18px;
+  cursor: pointer; display: inline-flex; align-items: center; gap: 8px;
+  transition: all 0.2s ease;
+}
+.btn:active { transform: scale(0.97); }
+
+.btn-primary { background: var(--accent); color: #07090c; box-shadow: 0 0 14px var(--accent-glow); }
+.btn-primary:hover { opacity: 0.9; transform: translateY(-1px); }
+.btn-primary:disabled { opacity: 0.4; cursor: not-allowed; }
+
+.btn-secondary { background: var(--bg-surface); color: var(--text); border: 1px solid var(--panel-border); }
+.btn-secondary:hover { background: var(--panel-hover); border-color: var(--muted-dark); }
+
+.btn-record { background: rgba(255, 59, 92, 0.15); color: var(--bad); border: 1px solid var(--bad); }
+.btn-record.recording { background: var(--bad); color: #fff; animation: pulseRed 1.5s infinite; }
+@keyframes pulseRed { 0% { box-shadow: 0 0 0 0 rgba(255, 59, 92, 0.6); } 70% { box-shadow: 0 0 0 10px rgba(255, 59, 92, 0); } 100% { box-shadow: 0 0 0 0 rgba(255, 59, 92, 0); } }
+
+.btn-danger { background: transparent; color: var(--bad); border: 1px solid rgba(255, 59, 92, 0.4); }
+
+/* ---------- Cards e painéis ---------- */
+.panel-card {
+  background: var(--panel); border: 1px solid var(--panel-border);
+  border-radius: var(--radius-md); padding: 18px; box-shadow: var(--shadow);
+}
+.panel-title {
+  font-size: 11.5px; font-weight: 700; text-transform: uppercase;
+  letter-spacing: 0.1em; color: var(--muted); margin-bottom: 14px;
+  display: flex; align-items: center; justify-content: space-between;
+}
+
+/* Etiqueta monoespaçada à direita do título do painel. */
+.panel-tag { font-family: var(--font-mono); font-size: 10px; color: var(--muted); text-transform: none; letter-spacing: 0; }
+.panel-tag.cyan { color: var(--cyan); }
+.panel-tag.accent { color: var(--accent); }
+
+/* ---------- Faixa de status (bom / ruim / atenção / ocioso) ---------- */
+.status-banner {
+  padding: 12px 14px; border-radius: 10px; font-size: 13.5px; font-weight: 700;
+  display: flex; align-items: center; gap: 10px; margin-bottom: 14px; transition: all 0.2s ease;
+}
+.status-banner.good { background: var(--good-bg); color: var(--accent); border: 1px solid rgba(200, 255, 77, 0.3); }
+.status-banner.bad { background: var(--bad-bg); color: var(--bad); border: 1px solid rgba(255, 59, 92, 0.3); }
+.status-banner.warn { background: var(--warn-bg); color: var(--warn); border: 1px solid rgba(255, 184, 77, 0.3); }
+.status-banner.idle { background: var(--bg-surface); color: var(--muted); border: 1px dashed var(--panel-border); }
+
+/* ---------- Sub-abas (Exercício Único / Circuito) ---------- */
+.mode-tabs { display: flex; gap: 4px; background: var(--bg-surface); padding: 3px; border-radius: 10px; border: 1px solid var(--panel-border); }
+.mode-tab { background: transparent; border: none; color: var(--muted); font-family: var(--font-main); font-size: 12.5px; font-weight: 600; padding: 7px 12px; border-radius: 7px; cursor: pointer; transition: all 0.2s ease; }
+.mode-tab:hover { color: var(--text); }
+.mode-tab.active { background: var(--panel); color: var(--accent); border: 1px solid var(--panel-border); }
+
+/* ---------- Linha de configuração + switch ---------- */
+.setting-row { display: flex; align-items: center; justify-content: space-between; padding: 14px 0; border-bottom: 1px solid var(--panel-border); }
+.setting-row:last-child { border-bottom: none; }
+.setting-label { font-size: 14px; font-weight: 600; }
+.setting-desc { font-size: 12px; color: var(--muted); margin-top: 2px; }
+.setting-input {
+  width: 70px; background: var(--bg-surface); color: var(--text);
+  border: 1px solid var(--panel-border); padding: 6px; border-radius: 6px;
+  font-family: var(--font-mono);
+}
+
+.switch { position: relative; display: inline-block; width: 44px; height: 24px; }
+.switch input { opacity: 0; width: 0; height: 0; }
+.slider { position: absolute; cursor: pointer; inset: 0; background-color: var(--bg-surface); border: 1px solid var(--panel-border); transition: .2s; border-radius: 24px; }
+.slider:before { position: absolute; content: ""; height: 16px; width: 16px; left: 3px; bottom: 3px; background-color: var(--muted); transition: .2s; border-radius: 50%; }
+input:checked + .slider { background-color: var(--accent); border-color: var(--accent); }
+input:checked + .slider:before { transform: translateX(20px); background-color: #07090c; }
+
+/* ---------- Tabela de dados ---------- */
+.history-table-container { background: var(--panel); border: 1px solid var(--panel-border); border-radius: var(--radius-md); overflow: hidden; box-shadow: var(--shadow); }
+.table-scroll { overflow-x: auto; -webkit-overflow-scrolling: touch; }
+table.data-table { width: 100%; border-collapse: collapse; text-align: left; font-size: 13.5px; }
+table.data-table th { background: var(--bg-surface); padding: 14px 18px; color: var(--muted); font-weight: 600; border-bottom: 1px solid var(--panel-border); font-family: var(--font-mono); font-size: 12px; text-transform: uppercase; }
+table.data-table td { padding: 14px 18px; border-bottom: 1px solid var(--panel-border); color: var(--text); }
+table.data-table tr:hover { background: var(--panel-hover); }
+
+/* ---------- Toast ---------- */
+.toast {
+  position: fixed; bottom: 24px; right: 24px; background: var(--panel); border: 1px solid var(--accent);
+  color: var(--text); padding: 14px 20px; border-radius: 12px; box-shadow: var(--shadow); display: flex; align-items: center; gap: 12px;
+  font-size: 14px; font-weight: 600; z-index: 1100; transform: translateY(100px); opacity: 0; transition: all 0.3s ease;
+}
+.toast.show { transform: translateY(0); opacity: 1; }

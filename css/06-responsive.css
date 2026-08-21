@@ -1,0 +1,64 @@
+/* ============================================================
+   06 — RESPONSIVO E IMPRESSÃO
+   Precisa ser o ÚLTIMO arquivo carregado para sobrescrever as
+   regras de desktop definidas nos arquivos anteriores.
+   ============================================================ */
+
+/* ---------- Mobile ---------- */
+@media (max-width: 640px) {
+  header { padding: 12px 16px; }
+  .header-container { gap: 10px; }
+  .brand-title { font-size: 17px; }
+  .brand-tag { display: none; }
+
+  .nav-tabs {
+    width: 100%;
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+    scrollbar-width: none;
+  }
+  .nav-tabs::-webkit-scrollbar { display: none; }
+  .tab-btn { flex-shrink: 0; padding: 9px 13px; font-size: 12.5px; }
+
+  .main-wrap { padding: 0 14px; margin-top: 18px; }
+
+  .controls-bar { flex-direction: column; align-items: stretch; padding: 14px; gap: 12px; }
+  .select-group { width: 100%; }
+  .select-group select { flex: 1; min-width: 0; }
+  .mode-tabs { width: 100%; }
+  .mode-tab { flex: 1; text-align: center; }
+  .action-btns { width: 100%; }
+
+  .circuit-step-row select { font-size: 13px; }
+
+  .stage-container { aspect-ratio: 3/4; }
+  .video-controls { flex-wrap: wrap; gap: 8px; }
+
+  .rest-overlay-countdown { font-size: 48px; }
+  .rest-overlay-exercise { font-size: 18px; }
+
+  .metrics-column { gap: 12px; }
+  .panel-card { padding: 14px; }
+
+  table.data-table { font-size: 12px; }
+  table.data-table th, table.data-table td { padding: 10px 12px; white-space: nowrap; }
+
+  .academic-card { padding: 18px; }
+  .academic-card h2 { font-size: 17px; }
+  .formula-box { font-size: 12.5px; padding: 14px 16px; }
+
+  .laudo-card { padding: 18px; max-height: 90vh; overflow-y: auto; }
+  .laudo-grid { grid-template-columns: 1fr; }
+  .laudo-header { flex-wrap: wrap; gap: 10px; }
+
+  .toast { left: 16px; right: 16px; bottom: 16px; }
+}
+
+/* ---------- Impressão: só o laudo vai para o papel/PDF ---------- */
+@media print {
+  body * { visibility: hidden; }
+  .laudo-card, .laudo-card * { visibility: visible; }
+  .laudo-card { position: absolute; left: 0; top: 0; width: 100%; background: #fff; color: #000; border: none; }
+  .laudo-box { background: #f0f0f0; border-color: #ccc; color: #000; }
+  .btn { display: none !important; }
+}

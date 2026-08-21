@@ -13,434 +13,15 @@
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600;700&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
 
-<style>
-  :root {
-    --bg: #07090c;
-    --bg-surface: #0e1219;
-    --panel: #131924;
-    --panel-border: #1f2a3e;
-    --panel-hover: #192233;
-    
-    --text: #f0f4f8;
-    --muted: #8292a6;
-    --muted-dark: #485668;
-    
-    --accent: #c8ff4d;      /* Lime Cyber Neon */
-    --accent-glow: rgba(200, 255, 77, 0.25);
-    --cyan: #00f2fe;        /* Cyan HUD */
-    --cyan-glow: rgba(0, 242, 254, 0.25);
-    --bad: #ff3b5c;         /* Crimson Error */
-    --bad-bg: rgba(255, 59, 92, 0.12);
-    --warn: #ffb84d;        /* Orange Warning */
-    --warn-bg: rgba(255, 184, 77, 0.12);
-    --good-bg: rgba(200, 255, 77, 0.12);
-    
-    --font-main: 'Plus Jakarta Sans', -apple-system, sans-serif;
-    --font-mono: 'JetBrains Mono', monospace;
-    --radius-sm: 8px;
-    --radius-md: 14px;
-    --radius-lg: 20px;
-    --shadow: 0 12px 32px rgba(0, 0, 0, 0.45);
-  }
-
-  * { box-sizing: border-box; margin: 0; padding: 0; }
-
-  body {
-    background-color: var(--bg);
-    color: var(--text);
-    font-family: var(--font-main);
-    min-height: 100vh;
-    padding-bottom: 60px;
-    overflow-x: hidden;
-    background-image: 
-      radial-gradient(circle at 15% 10%, rgba(200, 255, 77, 0.04) 0%, transparent 40%),
-      radial-gradient(circle at 85% 60%, rgba(0, 242, 254, 0.04) 0%, transparent 40%);
-  }
-
-  /* Header principal */
-  header {
-    background: rgba(14, 18, 25, 0.85);
-    backdrop-filter: blur(12px);
-    border-bottom: 1px solid var(--panel-border);
-    position: sticky;
-    top: 0;
-    z-index: 100;
-    padding: 16px 24px;
-  }
-
-  .header-container {
-    max-width: 1380px;
-    margin: 0 auto;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    gap: 16px;
-    flex-wrap: wrap;
-  }
-
-  .brand { display: flex; align-items: center; gap: 12px; }
-  .brand-logo {
-    width: 38px; height: 38px;
-    background: linear-gradient(135deg, var(--accent), var(--cyan));
-    border-radius: 10px;
-    display: flex; align-items: center; justify-content: center;
-    color: #07090c; font-weight: 800; font-size: 20px;
-    box-shadow: 0 0 16px var(--accent-glow);
-  }
-  .brand-title {
-    font-size: 20px; font-weight: 800; letter-spacing: -0.03em;
-    background: linear-gradient(180deg, #ffffff, #c2d1e0);
-    -webkit-background-clip: text; -webkit-text-fill-color: transparent;
-  }
-  .brand-tag {
-    font-family: var(--font-mono); font-size: 10px; padding: 3px 8px;
-    background: var(--panel-border); color: var(--accent);
-    border-radius: 6px; text-transform: uppercase; letter-spacing: 0.08em;
-  }
-
-  .nav-tabs {
-    display: flex; gap: 6px;
-    background: var(--bg-surface); padding: 4px;
-    border-radius: 12px; border: 1px solid var(--panel-border);
-  }
-  .tab-btn {
-    background: transparent; border: none; color: var(--muted);
-    font-family: var(--font-main); font-size: 13px; font-weight: 600;
-    padding: 8px 16px; border-radius: 8px; cursor: pointer;
-    transition: all 0.2s ease; display: flex; align-items: center; gap: 8px;
-  }
-  .tab-btn:hover { color: var(--text); }
-  .tab-btn.active {
-    background: var(--panel); color: var(--accent);
-    border: 1px solid var(--panel-border); box-shadow: 0 2px 8px rgba(0,0,0,0.3);
-  }
-
-  .main-wrap { max-width: 1380px; margin: 28px auto 0; padding: 0 20px; }
-  .tab-content { display: none; }
-  .tab-content.active { display: block; animation: fadeIn 0.25s ease-out; }
-  @keyframes fadeIn { from { opacity: 0; transform: translateY(6px); } to { opacity: 1; transform: translateY(0); } }
-
-  .controls-bar {
-    background: var(--panel);
-    border: 1px solid var(--panel-border);
-    border-radius: var(--radius-md);
-    padding: 16px 20px;
-    display: flex; flex-wrap: wrap; gap: 16px;
-    align-items: center; justify-content: space-between;
-    margin-bottom: 20px;
-  }
-
-  .select-group { display: flex; align-items: center; gap: 12px; }
-  .select-group label { font-size: 13px; font-weight: 600; color: var(--muted); }
-  select {
-    font-family: var(--font-main); font-size: 14px; font-weight: 600;
-    background: var(--bg-surface); color: var(--text);
-    border: 1px solid var(--panel-border); border-radius: var(--radius-sm);
-    padding: 10px 14px; cursor: pointer; outline: none;
-  }
-
-  .action-btns { display: flex; align-items: center; gap: 10px; flex-wrap: wrap; }
-
-  .btn {
-    font-family: var(--font-main); font-weight: 700; font-size: 13.5px;
-    border: none; border-radius: var(--radius-sm); padding: 10px 18px;
-    cursor: pointer; display: inline-flex; align-items: center; gap: 8px;
-    transition: all 0.2s ease;
-  }
-  .btn:active { transform: scale(0.97); }
-
-  .btn-primary { background: var(--accent); color: #07090c; box-shadow: 0 0 14px var(--accent-glow); }
-  .btn-primary:hover { opacity: 0.9; transform: translateY(-1px); }
-  .btn-primary:disabled { opacity: 0.4; cursor: not-allowed; }
-
-  .btn-secondary { background: var(--bg-surface); color: var(--text); border: 1px solid var(--panel-border); }
-  .btn-secondary:hover { background: var(--panel-hover); border-color: var(--muted-dark); }
-
-  .btn-record { background: rgba(255, 59, 92, 0.15); color: var(--bad); border: 1px solid var(--bad); }
-  .btn-record.recording { background: var(--bad); color: #fff; animation: pulseRed 1.5s infinite; }
-  @keyframes pulseRed { 0% { box-shadow: 0 0 0 0 rgba(255, 59, 92, 0.6); } 70% { box-shadow: 0 0 0 10px rgba(255, 59, 92, 0); } 100% { box-shadow: 0 0 0 0 rgba(255, 59, 92, 0); } }
-
-  .btn-danger { background: transparent; color: var(--bad); border: 1px solid rgba(255, 59, 92, 0.4); }
-
-  .file-input-wrapper { position: relative; overflow: hidden; display: inline-block; }
-  .file-input-wrapper input[type=file] { position: absolute; left: 0; top: 0; opacity: 0; font-size: 100px; cursor: pointer; }
-
-  /* Layout 3 Colunas na Aba Ao Vivo */
-  .analyzer-grid-3col {
-    display: grid;
-    grid-template-columns: 1fr 340px 320px;
-    gap: 20px;
-    align-items: start;
-  }
-  @media (max-width: 1200px) {
-    .analyzer-grid-3col { grid-template-columns: 1fr 360px; }
-  }
-  @media (max-width: 900px) {
-    .analyzer-grid-3col { grid-template-columns: 1fr; }
-  }
-
-  .stage-container {
-    background: var(--panel);
-    border: 1px solid var(--panel-border);
-    border-radius: var(--radius-lg);
-    overflow: hidden; position: relative;
-    aspect-ratio: 16/9; box-shadow: var(--shadow);
-    display: flex; align-items: center; justify-content: center;
-  }
-
-  video, canvas.overlay-canvas { position: absolute; top: 0; left: 0; width: 100%; height: 100%; object-fit: contain; }
-  .flipped { transform: scaleX(-1); }
-
-  .stage-placeholder {
-    display: flex; flex-direction: column; align-items: center; justify-content: center;
-    gap: 16px; color: var(--muted); text-align: center; padding: 30px; z-index: 5;
-  }
-  .stage-placeholder-icon {
-    width: 64px; height: 64px; border-radius: 50%;
-    background: var(--bg-surface); border: 1px solid var(--panel-border);
-    display: flex; align-items: center; justify-content: center; color: var(--accent);
-  }
-
-  .hud-top-bar {
-    position: absolute; top: 16px; left: 16px; right: 16px;
-    display: flex; justify-content: space-between; align-items: center;
-    pointer-events: none; z-index: 10;
-  }
-  .hud-badge {
-    background: rgba(7, 9, 12, 0.75); backdrop-filter: blur(8px);
-    border: 1px solid rgba(255, 255, 255, 0.1); padding: 6px 12px;
-    border-radius: 20px; font-family: var(--font-mono); font-size: 12px;
-    color: var(--accent); display: flex; align-items: center; gap: 6px;
-  }
-  .hud-badge .dot { width: 8px; height: 8px; border-radius: 50%; background: var(--accent); box-shadow: 0 0 8px var(--accent); }
-  .hud-badge.offline .dot { background: var(--muted); box-shadow: none; }
-  .hud-badge.recording .dot { background: var(--bad); box-shadow: 0 0 8px var(--bad); animation: blink 1s infinite; }
-  @keyframes blink { 50% { opacity: 0.3; } }
-
-  .video-controls {
-    position: absolute; bottom: 16px; left: 16px; right: 16px;
-    background: rgba(7, 9, 12, 0.85); backdrop-filter: blur(8px);
-    border: 1px solid var(--panel-border); border-radius: 12px;
-    padding: 10px 16px; display: flex; align-items: center; gap: 14px; z-index: 10;
-  }
-  .video-controls input[type=range] { flex: 1; accent-color: var(--accent); cursor: pointer; }
-
-  /* Métricas */
-  .metrics-column { display: flex; flex-direction: column; gap: 16px; }
-
-  .panel-card {
-    background: var(--panel); border: 1px solid var(--panel-border);
-    border-radius: var(--radius-md); padding: 18px; box-shadow: var(--shadow);
-  }
-  .panel-title {
-    font-size: 11.5px; font-weight: 700; text-transform: uppercase;
-    letter-spacing: 0.1em; color: var(--muted); margin-bottom: 14px;
-    display: flex; align-items: center; justify-content: space-between;
-  }
-
-  .status-banner {
-    padding: 12px 14px; border-radius: 10px; font-size: 13.5px; font-weight: 700;
-    display: flex; align-items: center; gap: 10px; margin-bottom: 14px; transition: all 0.2s ease;
-  }
-  .status-banner.good { background: var(--good-bg); color: var(--accent); border: 1px solid rgba(200, 255, 77, 0.3); }
-  .status-banner.bad { background: var(--bad-bg); color: var(--bad); border: 1px solid rgba(255, 59, 92, 0.3); }
-  .status-banner.warn { background: var(--warn-bg); color: var(--warn); border: 1px solid rgba(255, 184, 77, 0.3); }
-  .status-banner.idle { background: var(--bg-surface); color: var(--muted); border: 1px dashed var(--panel-border); }
-
-  .metric-box-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 14px; }
-  .metric-box { background: var(--bg-surface); border: 1px solid var(--panel-border); border-radius: 10px; padding: 12px; }
-  .metric-box .lbl { font-size: 10.5px; color: var(--muted); font-family: var(--font-mono); text-transform: uppercase; margin-bottom: 3px; }
-  .metric-box .val { font-family: var(--font-mono); font-size: 22px; font-weight: 700; color: var(--text); }
-  .metric-box .val.highlight { color: var(--accent); }
-  .metric-box .val.cyan { color: var(--cyan); }
-
-  .rep-counter-row {
-    display: grid; grid-template-columns: 1fr 1fr; gap: 10px;
-    background: var(--bg-surface); border: 1px solid var(--panel-border);
-    border-radius: 12px; padding: 14px; text-align: center;
-  }
-  .rep-val { font-family: var(--font-mono); font-size: 32px; font-weight: 800; line-height: 1; }
-  .rep-val.valid { color: var(--accent); }
-  .rep-val.invalid { color: var(--bad); }
-  .rep-lbl { font-size: 10px; color: var(--muted); text-transform: uppercase; letter-spacing: 0.08em; margin-top: 4px; font-weight: 600; }
-
-  .graph-container { margin-top: 12px; background: var(--bg-surface); border: 1px solid var(--panel-border); border-radius: 10px; padding: 10px; }
-  .graph-header { display: flex; justify-content: space-between; font-size: 10.5px; font-family: var(--font-mono); color: var(--muted); margin-bottom: 6px; }
-  canvas.sparkline-canvas { width: 100%; height: 50px; display: block; }
-
-  /* Visualizador 3D e Mapa Muscular (Coluna 3) */
-  canvas.canvas-3d {
-    width: 100%; height: 220px;
-    background: var(--bg-surface);
-    border: 1px solid var(--panel-border);
-    border-radius: 10px;
-    display: block;
-  }
-
-  .muscle-map-container {
-    display: grid; grid-template-columns: repeat(2, 1fr); gap: 8px; margin-top: 10px;
-  }
-  .muscle-badge {
-    background: var(--bg-surface); border: 1px solid var(--panel-border);
-    padding: 8px 10px; border-radius: 8px; font-size: 11px;
-    display: flex; align-items: center; justify-content: space-between;
-    transition: all 0.2s ease;
-  }
-  .muscle-badge.active { background: rgba(200, 255, 77, 0.15); border-color: var(--accent); color: var(--accent); }
-  .muscle-badge .dot { width: 8px; height: 8px; border-radius: 50%; background: var(--muted-dark); }
-  .muscle-badge.active .dot { background: var(--accent); box-shadow: 0 0 6px var(--accent); }
-
-  /* Analytics & TCC */
-  .stats-summary-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 16px; margin-bottom: 24px; }
-  .stat-card { background: var(--panel); border: 1px solid var(--panel-border); border-radius: var(--radius-md); padding: 20px; }
-  .stat-card .title { font-size: 12px; color: var(--muted); font-weight: 600; text-transform: uppercase; }
-  .stat-card .number { font-family: var(--font-mono); font-size: 32px; font-weight: 800; margin-top: 8px; color: var(--accent); }
-  .stat-card .sub { font-size: 12px; color: var(--muted); margin-top: 4px; }
-
-  .history-table-container { background: var(--panel); border: 1px solid var(--panel-border); border-radius: var(--radius-md); overflow: hidden; box-shadow: var(--shadow); }
-  .table-scroll { overflow-x: auto; -webkit-overflow-scrolling: touch; }
-  table.data-table { width: 100%; border-collapse: collapse; text-align: left; font-size: 13.5px; }
-  table.data-table th { background: var(--bg-surface); padding: 14px 18px; color: var(--muted); font-weight: 600; border-bottom: 1px solid var(--panel-border); font-family: var(--font-mono); font-size: 12px; text-transform: uppercase; }
-  table.data-table td { padding: 14px 18px; border-bottom: 1px solid var(--panel-border); color: var(--text); }
-  table.data-table tr:hover { background: var(--panel-hover); }
-
-  .academic-section { display: flex; flex-direction: column; gap: 24px; }
-  .academic-card { background: var(--panel); border: 1px solid var(--panel-border); border-radius: var(--radius-md); padding: 28px; }
-  .academic-card h2 { font-size: 20px; font-weight: 700; margin-bottom: 12px; color: var(--accent); display: flex; align-items: center; gap: 10px; }
-  .academic-card p { color: var(--muted); font-size: 15px; line-height: 1.6; margin-bottom: 16px; }
-  .formula-box { background: var(--bg-surface); border: 1px solid var(--panel-border); border-left: 4px solid var(--accent); padding: 18px 22px; border-radius: var(--radius-sm); font-family: var(--font-mono); font-size: 15px; color: var(--text); margin: 16px 0; overflow-x: auto; }
-  .landmark-map-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 16px; margin-top: 20px; }
-  .landmark-item { background: var(--bg-surface); border: 1px solid var(--panel-border); padding: 14px; border-radius: 10px; font-size: 13px; }
-  .landmark-item b { color: var(--cyan); font-family: var(--font-mono); }
-
-  .config-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); gap: 20px; }
-  .setting-row { display: flex; align-items: center; justify-content: space-between; padding: 14px 0; border-bottom: 1px solid var(--panel-border); }
-  .setting-row:last-child { border-bottom: none; }
-  .setting-label { font-size: 14px; font-weight: 600; }
-  .setting-desc { font-size: 12px; color: var(--muted); margin-top: 2px; }
-
-  .switch { position: relative; display: inline-block; width: 44px; height: 24px; }
-  .switch input { opacity: 0; width: 0; height: 0; }
-  .slider { position: absolute; cursor: pointer; inset: 0; background-color: var(--bg-surface); border: 1px solid var(--panel-border); transition: .2s; border-radius: 24px; }
-  .slider:before { position: absolute; content: ""; height: 16px; width: 16px; left: 3px; bottom: 3px; background-color: var(--muted); transition: .2s; border-radius: 50%; }
-  input:checked + .slider { background-color: var(--accent); border-color: var(--accent); }
-  input:checked + .slider:before { transform: translateX(20px); background-color: #07090c; }
-
-  /* Modo Circuito */
-  .mode-tabs { display: flex; gap: 4px; background: var(--bg-surface); padding: 3px; border-radius: 10px; border: 1px solid var(--panel-border); }
-  .mode-tab { background: transparent; border: none; color: var(--muted); font-family: var(--font-main); font-size: 12.5px; font-weight: 600; padding: 7px 12px; border-radius: 7px; cursor: pointer; transition: all 0.2s ease; }
-  .mode-tab:hover { color: var(--text); }
-  .mode-tab.active { background: var(--panel); color: var(--accent); border: 1px solid var(--panel-border); }
-
-  .circuit-step-row { display: flex; align-items: center; gap: 10px; padding: 10px 0; border-bottom: 1px solid var(--panel-border); }
-  .circuit-step-row:last-child { border-bottom: none; }
-  .circuit-step-num { font-family: var(--font-mono); font-size: 12px; color: var(--muted); width: 18px; flex-shrink: 0; }
-  .circuit-step-row select { flex: 1; font-family: var(--font-main); font-size: 13.5px; font-weight: 600; background: var(--bg-surface); color: var(--text); border: 1px solid var(--panel-border); border-radius: var(--radius-sm); padding: 8px 10px; }
-  .circuit-step-reps-wrap { display: flex; align-items: center; gap: 6px; flex-shrink: 0; }
-  .circuit-step-reps-wrap span { font-size: 11px; color: var(--muted); font-family: var(--font-mono); }
-  .circuit-step-row input[type=number] { width: 60px; background: var(--bg-surface); color: var(--text); border: 1px solid var(--panel-border); padding: 8px; border-radius: var(--radius-sm); font-family: var(--font-mono); text-align: center; }
-  .circuit-step-remove { background: transparent; border: none; color: var(--muted); cursor: pointer; font-size: 15px; padding: 4px 8px; flex-shrink: 0; }
-  .circuit-step-remove:hover { color: var(--bad); }
-
-  .circuit-progress-item { display: flex; align-items: center; justify-content: space-between; padding: 8px 10px; border-radius: 8px; font-size: 12.5px; margin-bottom: 6px; background: var(--bg-surface); border: 1px solid var(--panel-border); color: var(--muted); }
-  .circuit-progress-item.active { border-color: var(--accent); color: var(--text); background: rgba(200, 255, 77, 0.08); }
-  .circuit-progress-item.done { color: var(--accent); }
-  .circuit-progress-item .badge { font-family: var(--font-mono); font-size: 11px; }
-
-  .rest-overlay {
-    position: absolute; inset: 0; z-index: 20;
-    background: rgba(7, 9, 12, 0.92); backdrop-filter: blur(6px);
-    display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 10px;
-    text-align: center; padding: 20px;
-  }
-  .rest-overlay-label { font-family: var(--font-mono); font-size: 12px; letter-spacing: 0.1em; color: var(--muted); text-transform: uppercase; }
-  .rest-overlay-exercise { font-size: 22px; font-weight: 800; color: var(--text); }
-  .rest-overlay-countdown { font-family: var(--font-mono); font-size: 64px; font-weight: 800; color: var(--accent); line-height: 1; margin: 4px 0; }
-
-  /* Modal de Laudo PDF */
-  .modal-overlay {
-    position: fixed; inset: 0; background: rgba(7, 9, 12, 0.85); backdrop-filter: blur(10px);
-    display: none; align-items: center; justify-content: center; z-index: 1000; padding: 20px; overflow-y: auto;
-  }
-  .modal-overlay.active { display: flex; animation: fadeIn 0.2s ease-out; }
-  .laudo-card { background: #0f141d; border: 1px solid var(--panel-border); border-radius: var(--radius-lg); max-width: 800px; width: 100%; padding: 32px; box-shadow: var(--shadow); color: var(--text); }
-  .laudo-header { display: flex; justify-content: space-between; align-items: center; border-bottom: 2px solid var(--panel-border); padding-bottom: 16px; margin-bottom: 20px; }
-  .laudo-title { font-size: 20px; font-weight: 800; color: var(--accent); }
-  .laudo-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin: 16px 0; }
-  .laudo-box { background: var(--bg-surface); padding: 14px; border-radius: 10px; border: 1px solid var(--panel-border); }
-  .laudo-box label { font-size: 11px; color: var(--muted); font-family: var(--font-mono); text-transform: uppercase; }
-  .laudo-box val { font-size: 18px; font-weight: 700; display: block; margin-top: 4px; }
-  .risk-badge { display: inline-block; padding: 6px 14px; border-radius: 20px; font-weight: 800; font-size: 13px; text-transform: uppercase; font-family: var(--font-mono); }
-  .risk-low { background: var(--good-bg); color: var(--accent); border: 1px solid var(--accent); }
-  .risk-med { background: var(--warn-bg); color: var(--warn); border: 1px solid var(--warn); }
-  .risk-high { background: var(--bad-bg); color: var(--bad); border: 1px solid var(--bad); }
-  .prescription-box { background: var(--bg-surface); border-left: 4px solid var(--cyan); padding: 16px; border-radius: var(--radius-sm); margin-top: 20px; font-size: 14px; line-height: 1.6; }
-
-  .toast {
-    position: fixed; bottom: 24px; right: 24px; background: var(--panel); border: 1px solid var(--accent);
-    color: var(--text); padding: 14px 20px; border-radius: 12px; box-shadow: var(--shadow); display: flex; align-items: center; gap: 12px;
-    font-size: 14px; font-weight: 600; z-index: 1100; transform: translateY(100px); opacity: 0; transition: all 0.3s ease;
-  }
-  .toast.show { transform: translateY(0); opacity: 1; }
-
-  /* Mobile */
-  @media (max-width: 640px) {
-    header { padding: 12px 16px; }
-    .header-container { gap: 10px; }
-    .brand-title { font-size: 17px; }
-    .brand-tag { display: none; }
-
-    .nav-tabs {
-      width: 100%;
-      overflow-x: auto;
-      -webkit-overflow-scrolling: touch;
-      scrollbar-width: none;
-    }
-    .nav-tabs::-webkit-scrollbar { display: none; }
-    .tab-btn { flex-shrink: 0; padding: 9px 13px; font-size: 12.5px; }
-
-    .main-wrap { padding: 0 14px; margin-top: 18px; }
-
-    .controls-bar { flex-direction: column; align-items: stretch; padding: 14px; gap: 12px; }
-    .select-group { width: 100%; }
-    .select-group select { flex: 1; min-width: 0; }
-    .mode-tabs { width: 100%; }
-    .mode-tab { flex: 1; text-align: center; }
-    .action-btns { width: 100%; }
-
-    .circuit-step-row select { font-size: 13px; }
-
-    .stage-container { aspect-ratio: 3/4; }
-    .video-controls { flex-wrap: wrap; gap: 8px; }
-
-    .rest-overlay-countdown { font-size: 48px; }
-    .rest-overlay-exercise { font-size: 18px; }
-
-    .metrics-column { gap: 12px; }
-    .panel-card { padding: 14px; }
-
-    table.data-table { font-size: 12px; }
-    table.data-table th, table.data-table td { padding: 10px 12px; white-space: nowrap; }
-
-    .academic-card { padding: 18px; }
-    .academic-card h2 { font-size: 17px; }
-    .formula-box { font-size: 12.5px; padding: 14px 16px; }
-
-    .laudo-card { padding: 18px; max-height: 90vh; overflow-y: auto; }
-    .laudo-grid { grid-template-columns: 1fr; }
-    .laudo-header { flex-wrap: wrap; gap: 10px; }
-
-    .toast { left: 16px; right: 16px; bottom: 16px; }
-  }
-
-  @media print {
-    body * { visibility: hidden; }
-    .laudo-card, .laudo-card * { visibility: visible; }
-    .laudo-card { position: absolute; left: 0; top: 0; width: 100%; background: #fff; color: #000; border: none; }
-    .laudo-box { background: #f0f0f0; border-color: #ccc; color: #000; }
-    .btn { display: none !important; }
-  }
-</style>
+<!-- Folhas de estilo numeradas na ordem da cascata: tokens →
+     layout → componentes → telas → responsivo. A ordem importa:
+     06-responsive.css precisa vir por último. -->
+<link rel="stylesheet" href="css/01-tokens.css">
+<link rel="stylesheet" href="css/02-layout.css">
+<link rel="stylesheet" href="css/03-components.css">
+<link rel="stylesheet" href="css/04-analyzer.css">
+<link rel="stylesheet" href="css/05-pages.css">
+<link rel="stylesheet" href="css/06-responsive.css">
 </head>
 <body>
 
@@ -449,21 +30,23 @@
     <div class="brand">
       <div class="brand-logo">FC</div>
       <div><div class="brand-title">FormaCerta AI</div></div>
-      <span class="brand-tag">TCC Computação & Biomecânica v4</span>
+      <span class="brand-tag">TCC Computação &amp; Biomecânica v4</span>
     </div>
     <nav class="nav-tabs">
       <button class="tab-btn active" data-tab="tab-live"><span>🎥</span> Análise Ao Vivo</button>
-      <button class="tab-btn" data-tab="tab-analytics"><span>📊</span> Desempenho & VBT</button>
+      <button class="tab-btn" data-tab="tab-analytics"><span>📊</span> Desempenho &amp; VBT</button>
       <button class="tab-btn" data-tab="tab-tcc"><span>📚</span> Metodologia TCC</button>
-      <button class="tab-btn" data-tab="tab-settings"><span>⚙️</span> Configurações & Calibração</button>
+      <button class="tab-btn" data-tab="tab-settings"><span>⚙️</span> Configurações &amp; Calibração</button>
     </nav>
   </div>
 </header>
 
 <main class="main-wrap">
-  
-  <!-- ABA 1: ANÁLISE AO VIVO -->
+
+  <!-- ═══════════════ ABA 1: ANÁLISE AO VIVO ═══════════════ -->
   <div id="tab-live" class="tab-content active">
+
+    <!-- Controles: exercício, modo de treino e ações da sessão -->
     <div class="controls-bar">
       <div class="select-group" id="singleModeGroup">
         <label for="exerciseSelect">Exercício:</label>
@@ -490,77 +73,88 @@
       </div>
     </div>
 
-    <div class="panel-card" id="circuitBuilderCard" style="display:none; margin-bottom:20px;">
+    <!-- Montador do circuito (visível só no Modo Circuito) -->
+    <div class="panel-card" id="circuitBuilderCard" style="display:none;">
       <div class="panel-title">
         <span>🔗 Montar Circuito</span>
-        <span style="font-family:var(--font-mono); font-size:10px; color:var(--muted);" id="circuitStepsCount">0 exercícios</span>
+        <span class="panel-tag" id="circuitStepsCount">0 exercícios</span>
       </div>
       <div id="circuitStepsList"></div>
-      <button type="button" id="addCircuitStepBtn" class="btn btn-secondary" style="font-size:12.5px; padding:8px 14px; margin-top:12px;"><span>➕</span> Adicionar Exercício</button>
+      <button type="button" id="addCircuitStepBtn" class="btn btn-secondary circuit-add-btn"><span>➕</span> Adicionar Exercício</button>
     </div>
 
     <div class="analyzer-grid-3col">
-      <!-- Coluna 1: Vídeo da Câmera -->
+
+      <!-- ---------- Coluna 1: vídeo + HUD ---------- -->
       <div>
         <div class="stage-container" id="stageContainer">
           <div class="hud-top-bar">
             <div class="hud-badge offline" id="hudStatusBadge"><span class="dot"></span><span id="hudStatusText">Câmera Desligada</span></div>
-            <div class="hud-badge" id="hudVoiceCmdBadge" style="display:none; color:var(--accent);"><span class="dot"></span><span>🎙 Voice Cmd: ON</span></div>
-            <div class="hud-badge" id="hudFpsBadge" style="display:none; color:var(--cyan);"><span>⚡ FPS:</span> <span id="fpsVal">0</span></div>
+            <div class="hud-badge" id="hudVoiceCmdBadge" style="display:none;"><span class="dot"></span><span>🎙 Voice Cmd: ON</span></div>
+            <div class="hud-badge cyan" id="hudFpsBadge" style="display:none;"><span>⚡ FPS:</span> <span id="fpsVal">0</span></div>
           </div>
+
           <div class="stage-placeholder" id="placeholder">
             <div class="stage-placeholder-icon">
               <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M23 7l-7 5 7 5V7z"/><rect x="1" y="5" width="15" height="14" rx="2" ry="2"/></svg>
             </div>
             <div>
-              <div style="font-weight: 700; color: var(--text); font-size: 16px; margin-bottom: 6px;">Pronto para analisar</div>
-              <div style="font-size: 13px;" id="exerciseInstructionHint">Selecione o exercício acima e inicie a câmera ou carregue um vídeo de teste.</div>
+              <div class="stage-placeholder-title">Pronto para analisar</div>
+              <div class="stage-placeholder-hint" id="exerciseInstructionHint">Selecione o exercício acima e inicie a câmera ou carregue um vídeo de teste.</div>
             </div>
           </div>
+
           <video id="videoElement" playsinline style="display:none;"></video>
           <canvas id="overlayCanvas" class="overlay-canvas"></canvas>
+
           <div class="rest-overlay" id="restOverlay" style="display:none;">
             <div class="rest-overlay-label">Descanso — próximo exercício</div>
             <div class="rest-overlay-exercise" id="restNextExerciseName">—</div>
             <div class="rest-overlay-countdown" id="restCountdownVal">15</div>
             <button type="button" id="skipRestBtn" class="btn btn-primary">Pular Descanso ⏭</button>
           </div>
+
           <div class="video-controls" id="videoFileControls" style="display:none;">
-            <button id="playPauseVideoBtn" class="btn btn-secondary" style="padding:4px 10px; font-size:12px;">⏸</button>
+            <button id="playPauseVideoBtn" class="btn btn-secondary">⏸</button>
             <input type="range" id="videoSeeker" value="0" min="0" max="100" step="0.1">
-            <span id="videoTimeText" style="font-family:var(--font-mono); font-size:11px; color:var(--muted);">00:00</span>
+            <span id="videoTimeText" class="video-time">00:00</span>
           </div>
         </div>
       </div>
 
-      <!-- Coluna 2: Métricas Principais -->
+      <!-- ---------- Coluna 2: métricas da execução ---------- -->
       <div class="metrics-column">
         <div class="panel-card">
-          <div class="panel-title"><span>Status da Execução</span><span id="planeTag" style="font-family:var(--font-mono); font-size:10px; color:var(--cyan);">Plano Sagital</span></div>
+          <div class="panel-title"><span>Status da Execução</span><span class="panel-tag cyan" id="planeTag">Plano Sagital</span></div>
+
           <div class="circuit-progress" id="circuitProgressPanel" style="display:none;">
-            <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:8px;">
-              <span style="font-family:var(--font-mono); font-size:11px; color:var(--muted);" id="circuitStepCounter">Exercício 1 de 2</span>
-              <button type="button" id="skipExerciseBtn" class="btn btn-secondary" style="font-size:11px; padding:4px 10px;">Pular ⏭</button>
+            <div class="circuit-progress-header">
+              <span class="panel-tag" id="circuitStepCounter">Exercício 1 de 2</span>
+              <button type="button" id="skipExerciseBtn" class="btn btn-secondary">Pular ⏭</button>
             </div>
             <div id="circuitProgressList"></div>
           </div>
+
           <div class="status-banner bad" id="formAlertBanner" style="display:none;"><span>⚠️</span><span id="formAlertText"></span></div>
           <div class="status-banner idle" id="statusBanner"><span>Aguardando início do movimento</span></div>
+
           <div class="rep-counter-row">
             <div><div class="rep-val valid" id="goodRepsVal">0</div><div class="rep-lbl">Reps Válidas</div></div>
             <div><div class="rep-val invalid" id="badRepsVal">0</div><div class="rep-lbl">Com Correção</div></div>
           </div>
-          <div class="metric-box-grid" style="margin-top: 12px;">
+
+          <div class="metric-box-grid spaced">
             <div class="metric-box"><div class="lbl" id="angleLabelName">Ângulo Principal</div><div class="val highlight" id="currentAngleVal">—</div></div>
-            <div class="metric-box"><div class="lbl">Velocidade VBT</div><div class="val cyan" id="vbtVal" style="font-size:18px; margin-top:4px;">0 °/s</div></div>
+            <div class="metric-box"><div class="lbl">Velocidade VBT</div><div class="val cyan sm" id="vbtVal">0 °/s</div></div>
           </div>
           <div class="metric-box-grid">
-            <div class="metric-box"><div class="lbl">Perda de Velocidade</div><div class="val" id="fatigueVal" style="font-size:16px; margin-top:4px;">0%</div></div>
-            <div class="metric-box"><div class="lbl">Postura</div><div class="val" id="postureVal" style="font-size:14px; margin-top:4px; color:var(--accent);">OK</div></div>
+            <div class="metric-box"><div class="lbl">Perda de Velocidade</div><div class="val xs" id="fatigueVal">0%</div></div>
+            <div class="metric-box"><div class="lbl">Postura</div><div class="val posture" id="postureVal">OK</div></div>
           </div>
           <div class="metric-box-grid" id="secondaryAngleRow" style="display:none;">
-            <div class="metric-box" style="grid-column: span 2;"><div class="lbl" id="secondaryAngleLabel">Ângulo Secundário</div><div class="val cyan" id="secondaryAngleVal" style="font-size:18px; margin-top:4px;">—</div></div>
+            <div class="metric-box wide"><div class="lbl" id="secondaryAngleLabel">Ângulo Secundário</div><div class="val cyan sm" id="secondaryAngleVal">—</div></div>
           </div>
+
           <div class="graph-container">
             <div class="graph-header"><span>Trajetória Angular (° vs Tempo)</span><span id="targetRangeTag">Alvo: 70° - 100°</span></div>
             <canvas id="sparklineCanvas" class="sparkline-canvas"></canvas>
@@ -568,22 +162,22 @@
         </div>
       </div>
 
-      <!-- Coluna 3: Visualizador 3D Rotacionável & Solicitação Muscular -->
+      <!-- ---------- Coluna 3: visualizador 3D e músculos ---------- -->
       <div class="metrics-column">
         <div class="panel-card">
           <div class="panel-title">
             <span>Visualizador 3D (360°)</span>
-            <span style="font-family:var(--font-mono); font-size:10px; color:var(--accent);">Pose Z-Depth</span>
+            <span class="panel-tag accent">Pose Z-Depth</span>
           </div>
           <canvas id="canvas3D" class="canvas-3d"></canvas>
-          <div style="display:flex; align-items:center; gap:10px; margin-top:8px;">
-            <label style="font-size:11px; color:var(--muted); font-family:var(--font-mono);">Rotação 3D:</label>
-            <input type="range" id="slider3DRotation" min="0" max="360" value="45" style="flex:1; accent-color:var(--accent);">
+          <div class="rotation-control">
+            <label for="slider3DRotation">Rotação 3D:</label>
+            <input type="range" id="slider3DRotation" min="0" max="360" value="45">
           </div>
         </div>
 
         <div class="panel-card">
-          <div class="panel-title"><span>Solicitação Muscular</span><span style="font-family:var(--font-mono); font-size:10px; color:var(--cyan);">Heatmap</span></div>
+          <div class="panel-title"><span>Solicitação Muscular</span><span class="panel-tag cyan">Heatmap</span></div>
           <div class="muscle-map-container" id="muscleBadgesGroup">
             <div class="muscle-badge" data-muscle="quads"><span>Quadríceps</span><span class="dot"></span></div>
             <div class="muscle-badge" data-muscle="glutes"><span>Glúteo Máximo</span><span class="dot"></span></div>
@@ -595,40 +189,40 @@
     </div>
   </div>
 
-  <!-- ABA 2: ANALYTICS E VBT -->
+  <!-- ═══════════════ ABA 2: DESEMPENHO & VBT ═══════════════ -->
   <div id="tab-analytics" class="tab-content">
     <div class="stats-summary-grid">
       <div class="stat-card"><div class="title">Total de Treinos Analisados</div><div class="number" id="statTotalSessions">0</div><div class="sub">Registrados no sistema</div></div>
       <div class="stat-card"><div class="title">Taxa de Conformidade (Score)</div><div class="number" id="statAccuracyScore">0%</div><div class="sub">Média de repetições perfeitas</div></div>
-      <div class="stat-card"><div class="title">Velocidade Média VBT</div><div class="number" id="statAvgVbt" style="color:var(--cyan);">0 °/s</div><div class="sub">Potência articular concêntrica</div></div>
+      <div class="stat-card"><div class="title">Velocidade Média VBT</div><div class="number cyan" id="statAvgVbt">0 °/s</div><div class="sub">Potência articular concêntrica</div></div>
     </div>
 
-    <div class="panel-card" style="margin-bottom:20px;">
+    <div class="panel-card">
       <div class="panel-title">
-        <span>Histórico de Sessões de Treino & Métricas Científicas</span>
-        <div style="display:flex; gap:10px; flex-wrap:wrap;">
-          <button id="generateLaudoBtn" class="btn btn-primary" style="padding:6px 12px; font-size:12px;"><span>📄</span> Gerar Laudo PDF</button>
-          <button id="exportCsvBtn" class="btn btn-secondary" style="padding:6px 12px; font-size:12px;"><span>📥</span> Exportar CSV</button>
-          <button id="exportJsonBtn" class="btn btn-secondary" style="padding:6px 12px; font-size:12px;"><span>📄</span> Exportar JSON</button>
-          <button id="clearHistoryBtn" class="btn btn-danger" style="padding:6px 12px; font-size:12px;"><span>🗑</span> Limpar</button>
+        <span>Histórico de Sessões de Treino &amp; Métricas Científicas</span>
+        <div class="history-actions">
+          <button id="generateLaudoBtn" class="btn btn-primary"><span>📄</span> Gerar Laudo PDF</button>
+          <button id="exportCsvBtn" class="btn btn-secondary"><span>📥</span> Exportar CSV</button>
+          <button id="exportJsonBtn" class="btn btn-secondary"><span>📄</span> Exportar JSON</button>
+          <button id="clearHistoryBtn" class="btn btn-danger"><span>🗑</span> Limpar</button>
         </div>
       </div>
       <div class="history-table-container">
         <div class="table-scroll">
           <table class="data-table">
             <thead><tr><th>Data / Hora</th><th>Exercício</th><th>Reps Válidas</th><th>Com Falha</th><th>VBT (°/s)</th><th>Precisão (%)</th><th>Ações</th></tr></thead>
-            <tbody id="historyTableBody"><tr><td colspan="7" style="text-align:center; color:var(--muted); padding:30px;">Nenhum treino gravado ainda. Realize um exercício na aba "Análise Ao Vivo".</td></tr></tbody>
+            <tbody id="historyTableBody"><tr><td colspan="7" class="history-empty">Nenhum treino gravado ainda. Realize um exercício na aba "Análise Ao Vivo".</td></tr></tbody>
           </table>
         </div>
       </div>
     </div>
   </div>
 
-  <!-- ABA 3: METODOLOGIA TCC -->
+  <!-- ═══════════════ ABA 3: METODOLOGIA TCC ═══════════════ -->
   <div id="tab-tcc" class="tab-content">
     <div class="academic-section">
       <div class="academic-card">
-        <h2>📐 Formulação Matemática da Biomecânica Articular & VBT</h2>
+        <h2>📐 Formulação Matemática da Biomecânica Articular &amp; VBT</h2>
         <p>O sistema utiliza as coordenadas espaciais tridimensionais $(x, y, z)$ fornecidas pelo modelo <b>BlazePose / MediaPipe Pose</b> para calcular o ângulo formado por três marcadores anatômicos consecutivos $A, B, C$, onde $B$ é a articulação pivô.</p>
         <div class="formula-box">
           Vetor BA:  u = (A.x - B.x, A.y - B.y, A.z - B.z)<br>
@@ -638,7 +232,9 @@
           Ângulo Articular (θ):  θ = arccos( (u · v) / (||u|| * ||v||) ) * (180 / π)<br><br>
           Velocidade Angular VBT (ω): ω = |θ(t) - θ(t - Δt)| / Δt   (deg/s)
         </div>
+        <p>Implementação: <b>js/core/geometry.js</b> (cálculo puro) e <b>js/pipeline/etapa3-biomecanica.js</b> (aplicação por frame).</p>
       </div>
+
       <div class="academic-card">
         <h2>🗺 Mapeamento de Keypoints do MediaPipe Pose (33 Landmarks)</h2>
         <p>Marcadores corporais padronizados utilizados pelo algoritmo de visão computacional para rastreamento de simetria e alinhamento articular:</p>
@@ -650,25 +246,27 @@
           <div class="landmark-item"><b>[25, 26]</b> Joelhos Esquerdo / Direito</div>
           <div class="landmark-item"><b>[27, 28]</b> Tornozelos Esquerdo / Direito</div>
         </div>
+        <p style="margin-top:16px;">A associação entre exercício e marcadores está declarada em <b>js/config/exercises.js</b>.</p>
       </div>
     </div>
   </div>
 
-  <!-- ABA 4: CONFIGURAÇÕES E CALIBRAÇÃO -->
+  <!-- ═══════════════ ABA 4: CONFIGURAÇÕES ═══════════════ -->
   <div id="tab-settings" class="tab-content">
     <div class="config-grid">
+
       <div class="panel-card">
         <div class="panel-title">Calibração Goniométrica Personalizada</div>
-        <div style="font-size:12px; color:var(--muted); margin-bottom:16px;">Ajuste os limiares de ângulo ideal para praticantes com restrições de mobilidade:</div>
-        
+        <div class="setting-desc" style="margin-bottom:16px;">Ajuste os limiares de ângulo ideal para praticantes com restrições de mobilidade:</div>
+
         <div class="setting-row">
           <div><div class="setting-label">Ângulo Mínimo de Profundidade (°)</div><div class="setting-desc">Limite máximo de flexão ideal.</div></div>
-          <input type="number" id="cfgGoodMin" value="70" style="width:70px; background:var(--bg-surface); color:var(--text); border:1px solid var(--panel-border); padding:6px; border-radius:6px; font-family:var(--font-mono);">
+          <input type="number" id="cfgGoodMin" class="setting-input" value="70">
         </div>
 
         <div class="setting-row">
           <div><div class="setting-label">Ângulo Máximo de Profundidade (°)</div><div class="setting-desc">Limite mínimo de flexão aceitável.</div></div>
-          <input type="number" id="cfgGoodMax" value="100" style="width:70px; background:var(--bg-surface); color:var(--text); border:1px solid var(--panel-border); padding:6px; border-radius:6px; font-family:var(--font-mono);">
+          <input type="number" id="cfgGoodMax" class="setting-input" value="100">
         </div>
       </div>
 
@@ -676,12 +274,12 @@
         <div class="panel-title">Modo Circuito</div>
         <div class="setting-row">
           <div><div class="setting-label">Tempo de Descanso entre Exercícios (s)</div><div class="setting-desc">Contagem regressiva mostrada ao trocar de exercício no circuito.</div></div>
-          <input type="number" id="cfgRestSeconds" value="15" min="0" max="120" style="width:70px; background:var(--bg-surface); color:var(--text); border:1px solid var(--panel-border); padding:6px; border-radius:6px; font-family:var(--font-mono);">
+          <input type="number" id="cfgRestSeconds" class="setting-input" value="15" min="0" max="120">
         </div>
       </div>
 
       <div class="panel-card">
-        <div class="panel-title">Feedback Auditivo & Recursos 3D</div>
+        <div class="panel-title">Feedback Auditivo &amp; Recursos 3D</div>
         <div class="setting-row">
           <div><div class="setting-label">Sintetizador por Voz (PT-BR)</div><div class="setting-desc">Anuncia repetições e correções posturais em voz alta.</div></div>
           <label class="switch"><input type="checkbox" id="settingVoiceToggle" checked><span class="slider"></span></label>
@@ -699,7 +297,7 @@
   </div>
 </main>
 
-<!-- MODAL DE LAUDO BIOMECÂNICO / IMPRESSÃO PDF -->
+<!-- ═══════════════ MODAL: LAUDO BIOMECÂNICO ═══════════════ -->
 <div class="modal-overlay" id="laudoModal">
   <div class="laudo-card">
     <div class="laudo-header">
@@ -707,992 +305,35 @@
         <div class="laudo-title">FormaCerta AI — Laudo Cinesiológico</div>
         <div class="laudo-sub">Sistema de Avaliação Biomecânica e Riscos Lesionais v4</div>
       </div>
-      <button class="btn btn-secondary" onclick="closeLaudoModal()">✕ Fechar</button>
+      <button type="button" id="laudoCloseBtn" class="btn btn-secondary">✕ Fechar</button>
     </div>
 
-    <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:16px;">
-      <div><b>Avaliado / Atleta:</b> <input type="text" id="laudoPatientName" value="Atleta em Avaliação" style="background:transparent; border:none; border-bottom:1px solid var(--panel-border); color:var(--text); font-weight:700; padding:2px 6px;"></div>
+    <div class="laudo-meta">
+      <div><b>Avaliado / Atleta:</b> <input type="text" id="laudoPatientName" class="laudo-patient-input" value="Atleta em Avaliação"></div>
       <div><b>Classificação de Risco:</b> <span class="risk-badge risk-low" id="laudoRiskBadge">Baixo Risco</span></div>
     </div>
 
     <div class="laudo-grid">
       <div class="laudo-box"><label>Exercício Analisado</label><val id="laudoExerciseName">Agachamento</val></div>
-      <div class="laudo-box"><label>Score de Conformidade</label><val id="laudoScoreVal" style="color:var(--accent);">0%</val></div>
+      <div class="laudo-box"><label>Score de Conformidade</label><val class="accent" id="laudoScoreVal">0%</val></div>
       <div class="laudo-box"><label>Repetições Corretas / Falhas</label><val id="laudoRepsVal">0 / 0</val></div>
       <div class="laudo-box"><label>Velocidade VBT Média</label><val id="laudoVbtVal">0 deg/s</val></div>
     </div>
 
     <div class="prescription-box" id="laudoPrescriptionText">
-      <b>Diagnóstico Cinesiológico & Recomendações Corretivas:</b><br>
+      <b>Diagnóstico Cinesiológico &amp; Recomendações Corretivas:</b><br>
       Aguardando análise de movimento.
     </div>
 
-    <div style="display:flex; justify-content:flex-end; gap:12px; margin-top:24px;">
-      <button class="btn btn-primary" onclick="window.print()"><span>🖨</span> Imprimir / Salvar PDF</button>
+    <div class="laudo-footer">
+      <button type="button" id="laudoPrintBtn" class="btn btn-primary"><span>🖨</span> Imprimir / Salvar PDF</button>
     </div>
   </div>
 </div>
 
 <div id="toast" class="toast"><span id="toastIcon">ℹ️</span><span id="toastMessage">Mensagem</span></div>
 
-<script type="module">
-import { PoseLandmarker, FilesetResolver } from "https://cdn.jsdelivr.net/npm/@mediapipe/tasks-vision@0.10.14";
-
-const EXERCISES = {
-  squat: {
-    label: 'Agachamento', plane: 'Plano Sagital (Perfil)', angleLabel: 'Ângulo do Joelho',
-    points: { a: 24, b: 26, c: 28 }, secondary: { a: 12, b: 24, c: 26, name: 'Tronco' }, standing: 155, goodMin: 70, goodMax: 100,
-    muscles: ['quads', 'glutes'],
-    instruction: 'Fique de perfil para a câmera. Mantenha o joelho alinhado e desça até os coxas ficarem paralelas ao chão.',
-    checkValgus: true, checkPosture: true,
-    messages: { down: 'Descendo...', good: 'Ótima profundidade! Pode subir.', tooDeep: 'Atenção: Flexão excessiva do joelho.', shallow: 'Agachamento raso. Desça mais na próxima.', valgus: '⚠️ ALERTA: Joelhos caindo para dentro (Valgo)', posture: '⚠️ ALERTA: Tronco muito inclinado à frente' }
-  },
-  pushup: {
-    label: 'Flexão de Braço', plane: 'Plano Sagital (Perfil)', angleLabel: 'Ângulo do Cotovelo',
-    points: { a: 12, b: 14, c: 16 }, secondary: { a: 12, b: 24, c: 28, name: 'Coluna' }, standing: 155, goodMin: 70, goodMax: 95,
-    muscles: ['chest'],
-    instruction: 'Posicione a câmera na altura do chão de perfil. Mantenha troncos e pernas alinhados em linha reta.',
-    checkValgus: false, checkSpine: true,
-    messages: { down: 'Flexionando braços...', good: 'Boa amplitude! Empurre o chão.', tooDeep: 'Desceu além do necessário.', shallow: 'Flexão incompleta. Desça mais o tórax.', spine: '⚠️ ALERTA: Mantenha a coluna alinhada (sem arcar o quadril)' }
-  },
-  bicep: {
-    label: 'Rosca Direta', plane: 'Plano Sagital / Frontal', angleLabel: 'Ângulo do Cotovelo',
-    points: { a: 12, b: 14, c: 16 }, secondary: { a: 24, b: 12, c: 14, name: 'Ombro' }, standing: 150, goodMin: 40, goodMax: 65,
-    muscles: ['biceps'],
-    instruction: 'Fique de perfil ou levemente inclinado. Flexione o cotovelo sem projetar o ombro à frente.',
-    checkValgus: false, checkCheating: true,
-    messages: { down: 'Contraindo bíceps...', good: 'Contração máxima alcançada!', tooDeep: 'Flexão completa.', shallow: 'Suba mais a carga para contrair o bíceps.', cheating: '⚠️ ALERTA: Evite balançar o tronco ("roubo")' }
-  },
-  lateral_raise: {
-    label: 'Elevação Lateral', plane: 'Plano Frontal', angleLabel: 'Abdução do Ombro',
-    points: { a: 24, b: 12, c: 14 }, standing: 25, goodMin: 80, goodMax: 95, direction: 'up',
-    muscles: ['chest'],
-    instruction: 'Fique de frente para a câmera. Eleve os braços lateralmente até a altura dos ombros.',
-    checkValgus: false,
-    messages: { down: 'Elevando braços...', good: 'Altura ideal dos ombros!', tooDeep: 'Passou da linha dos ombros.', shallow: 'Eleve mais os braços até 90°.' }
-  },
-  lunge: {
-    label: 'Afundo (Lunge)', plane: 'Plano Sagital', angleLabel: 'Joelho Frontal',
-    points: { a: 24, b: 26, c: 28 }, standing: 155, goodMin: 75, goodMax: 100,
-    muscles: ['quads', 'glutes'],
-    instruction: 'Fique de perfil. Dê um passo à frente e flexione ambos os joelhos em ângulo de 90°.',
-    checkValgus: false,
-    messages: { down: 'Flexionando no afundo...', good: 'Excelente amplitude no afundo!', tooDeep: 'Flexão muito profunda.', shallow: 'Desça mais o joelho de trás.' }
-  }
-};
-
-const exerciseSelect = document.getElementById('exerciseSelect');
-const startCamBtn = document.getElementById('startCamBtn');
-const videoFileInput = document.getElementById('videoFileInput');
-const recordVideoBtn = document.getElementById('recordVideoBtn');
-const stopBtn = document.getElementById('stopBtn');
-const videoElement = document.getElementById('videoElement');
-const overlayCanvas = document.getElementById('overlayCanvas');
-const ctx = overlayCanvas.getContext('2d');
-const placeholder = document.getElementById('placeholder');
-const exerciseInstructionHint = document.getElementById('exerciseInstructionHint');
-const hudStatusBadge = document.getElementById('hudStatusBadge');
-const hudStatusText = document.getElementById('hudStatusText');
-const hudFpsBadge = document.getElementById('hudFpsBadge');
-const hudVoiceCmdBadge = document.getElementById('hudVoiceCmdBadge');
-const fpsVal = document.getElementById('fpsVal');
-const statusBanner = document.getElementById('statusBanner');
-const goodRepsVal = document.getElementById('goodRepsVal');
-const badRepsVal = document.getElementById('badRepsVal');
-const angleLabelName = document.getElementById('angleLabelName');
-const currentAngleVal = document.getElementById('currentAngleVal');
-const vbtVal = document.getElementById('vbtVal');
-const fatigueVal = document.getElementById('fatigueVal');
-const postureVal = document.getElementById('postureVal');
-const planeTag = document.getElementById('planeTag');
-const targetRangeTag = document.getElementById('targetRangeTag');
-const formAlertBanner = document.getElementById('formAlertBanner');
-const formAlertText = document.getElementById('formAlertText');
-const secondaryAngleRow = document.getElementById('secondaryAngleRow');
-const secondaryAngleLabel = document.getElementById('secondaryAngleLabel');
-const secondaryAngleVal = document.getElementById('secondaryAngleVal');
-const videoFileControls = document.getElementById('videoFileControls');
-const playPauseVideoBtn = document.getElementById('playPauseVideoBtn');
-const videoSeeker = document.getElementById('videoSeeker');
-const videoTimeText = document.getElementById('videoTimeText');
-const sparklineCanvas = document.getElementById('sparklineCanvas');
-const sCtx = sparklineCanvas.getContext('2d');
-const canvas3D = document.getElementById('canvas3D');
-const ctx3D = canvas3D.getContext('2d');
-const slider3DRotation = document.getElementById('slider3DRotation');
-const toast = document.getElementById('toast');
-const toastMessage = document.getElementById('toastMessage');
-const toastIcon = document.getElementById('toastIcon');
-
-// Settings & Config
-const cfgGoodMin = document.getElementById('cfgGoodMin');
-const cfgGoodMax = document.getElementById('cfgGoodMax');
-const settingVoiceToggle = document.getElementById('settingVoiceToggle');
-const settingVoiceCmdToggle = document.getElementById('settingVoiceCmdToggle');
-const settingMultiAngleToggle = document.getElementById('settingMultiAngleToggle');
-const cfgRestSeconds = document.getElementById('cfgRestSeconds');
-const voiceCmdDesc = document.getElementById('voiceCmdDesc');
-
-// Modo Circuito
-const singleModeGroup = document.getElementById('singleModeGroup');
-const modeTabs = document.getElementById('modeTabs');
-const circuitBuilderCard = document.getElementById('circuitBuilderCard');
-const circuitStepsList = document.getElementById('circuitStepsList');
-const circuitStepsCount = document.getElementById('circuitStepsCount');
-const addCircuitStepBtn = document.getElementById('addCircuitStepBtn');
-const circuitProgressPanel = document.getElementById('circuitProgressPanel');
-const circuitProgressList = document.getElementById('circuitProgressList');
-const circuitStepCounter = document.getElementById('circuitStepCounter');
-const skipExerciseBtn = document.getElementById('skipExerciseBtn');
-const restOverlay = document.getElementById('restOverlay');
-const restNextExerciseName = document.getElementById('restNextExerciseName');
-const restCountdownVal = document.getElementById('restCountdownVal');
-const skipRestBtn = document.getElementById('skipRestBtn');
-
-// History Table
-const historyTableBody = document.getElementById('historyTableBody');
-const statTotalSessions = document.getElementById('statTotalSessions');
-const statAccuracyScore = document.getElementById('statAccuracyScore');
-const statAvgVbt = document.getElementById('statAvgVbt');
-
-// Modal Laudo DOM
-const laudoModal = document.getElementById('laudoModal');
-const laudoExerciseName = document.getElementById('laudoExerciseName');
-const laudoScoreVal = document.getElementById('laudoScoreVal');
-const laudoRepsVal = document.getElementById('laudoRepsVal');
-const laudoVbtVal = document.getElementById('laudoVbtVal');
-const laudoRiskBadge = document.getElementById('laudoRiskBadge');
-const laudoPrescriptionText = document.getElementById('laudoPrescriptionText');
-
-let poseLandmarker = null, isRunning = false, isVideoFileMode = false, currentExerciseKey = 'squat', currentExercise = EXERCISES.squat;
-let repPhase = 'up', reachedGoodDepth = false, reachedAnyDepth = false, goodRepsCount = 0, badRepsCount = 0;
-let lastVoiceSpeech = '', phaseStartTime = performance.now();
-let audioCtx = null, toastTimeout = null;
-let sparklineData = [], lastFrameTime = performance.now(), frameCount = 0, currentFps = 0;
-
-// Estado do Modo Circuito
-function getCircuitRestSeconds() { return Math.max(0, parseInt(cfgRestSeconds.value, 10) || 0); }
-let circuitModeActive = false; // "Modo Circuito" selecionado no builder (antes de iniciar)
-let circuitMode = false;       // circuito realmente em execução
-let circuitSteps = [], circuitIndex = 0, circuitResults = [];
-let inRestPeriod = false, restTimeLeft = 0, restTimerHandle = null;
-let skipAutoSaveOnStop = false;
-let circuitStepUid = 0;
-
-// VBT e Velocidade Angular
-let lastAngleTime = performance.now(), lastAngleVal = 0, currentVbtSpeed = 0, firstRepVbtSpeed = 0;
-
-// MediaRecorder
-let mediaRecorder = null, recordedChunks = [], isRecordingVideo = false;
-
-const STORAGE_KEY = 'formacerta_sessions_db_v4';
-
-function calculateAngle(a, b, c) {
-  const ab = { x: a.x - b.x, y: a.y - b.y }, cb = { x: c.x - b.x, y: c.y - b.y };
-  const dot = ab.x * cb.x + ab.y * cb.y, magAB = Math.hypot(ab.x, ab.y), magCB = Math.hypot(cb.x, cb.y);
-  if (magAB * magCB === 0) return 0;
-  return Math.acos(Math.min(1, Math.max(-1, dot / (magAB * magCB)))) * (180 / Math.PI);
-}
-
-function showToast(message, icon = 'ℹ️') {
-  toastMessage.textContent = message;
-  toastIcon.textContent = icon;
-  toast.classList.add('show');
-  clearTimeout(toastTimeout);
-  toastTimeout = setTimeout(() => toast.classList.remove('show'), 3000);
-}
-
-function playSoundTone(freq = 440, type = 'sine', duration = 0.15) {
-  try {
-    if (!audioCtx) audioCtx = new (window.AudioContext || window.webkitAudioContext)();
-    const osc = audioCtx.createOscillator(), gain = audioCtx.createGain();
-    osc.type = type; osc.frequency.value = freq;
-    gain.gain.setValueAtTime(0.15, audioCtx.currentTime);
-    gain.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + duration);
-    osc.connect(gain); gain.connect(audioCtx.destination);
-    osc.start(); osc.stop(audioCtx.currentTime + duration);
-  } catch (e) { /* AudioContext indisponível (ex: antes de interação do usuário) */ }
-}
-
-function speak(text) {
-  if (!settingVoiceToggle.checked) return;
-  if (!('speechSynthesis' in window)) return;
-  if (text === lastVoiceSpeech) return;
-  lastVoiceSpeech = text;
-  const u = new SpeechSynthesisUtterance(text);
-  u.lang = 'pt-BR'; u.rate = 1.05;
-  // Enquanto o app fala, pausamos o reconhecimento de voz pra ele não se ouvir
-  // e interpretar a própria fala como um comando (ex: "pare" ecoando "parar").
-  if (recognitionActive && recognition) {
-    recognitionPausedForSpeech = true;
-    try { recognition.stop(); } catch (e) { /* já parado */ }
-  }
-  u.onend = u.onerror = () => {
-    recognitionPausedForSpeech = false;
-    if (recognitionActive && recognition) { try { recognition.start(); } catch (e) { /* já rodando */ } }
-  };
-  speechSynthesis.cancel(); speechSynthesis.speak(u);
-}
-
-// ==================== COMANDOS DE VOZ HANDS-FREE ====================
-let recognition = null, recognitionActive = false, recognitionPausedForSpeech = false;
-
-const VOICE_EXERCISE_ALIASES = {
-  squat: ['agachamento', 'squat'],
-  pushup: ['flexao de braco', 'flexao', 'pushup', 'push up'],
-  bicep: ['rosca direta', 'rosca', 'bicep', 'biceps'],
-  lateral_raise: ['elevacao lateral', 'lateral raise', 'elevacao'],
-  lunge: ['afundo', 'lunge']
-};
-
-function normalizeVoiceText(s) {
-  return s.normalize('NFD').replace(/[\u0300-\u036f]/g, '').toLowerCase().trim();
-}
-
-function handleVoiceCommand(rawTranscript) {
-  const t = normalizeVoiceText(rawTranscript);
-  const isRunningSession = stopBtn.style.display !== 'none';
-
-  if (/\b(iniciar|comecar|começa)\b/.test(t) && !isRunningSession) {
-    showToast(`🎙 Comando: iniciar`, '🎙');
-    if (!startCamBtn.disabled) startCamBtn.click();
-    return;
-  }
-  // Checagens de gravação vêm ANTES do "parar" genérico: "parar gravação" contém a
-  // palavra "parar" e não pode ser interpretada como "encerrar a sessão inteira".
-  if (/\b(parar grava[cç][aã]o|parar de gravar)\b/.test(t) && isRecordingVideo) {
-    showToast(`🎙 Comando: parar gravação`, '🎙');
-    recordVideoBtn.click();
-    return;
-  }
-  if (/\bgravar\b/.test(t) && isRunningSession && !isRecordingVideo) {
-    showToast(`🎙 Comando: gravar vídeo`, '🎙');
-    recordVideoBtn.click();
-    return;
-  }
-  if (/\b(parar|encerrar|finalizar)\b/.test(t) && isRunningSession) {
-    showToast(`🎙 Comando: parar`, '🎙');
-    stopBtn.click();
-    return;
-  }
-  if (/\b(pular|proximo|avancar|continuar|pronto)\b/.test(t) && circuitMode && isRunningSession) {
-    showToast(`🎙 Comando: pular`, '🎙');
-    if (inRestPeriod) endRestPeriod(); else advanceCircuit();
-    return;
-  }
-  // No modo circuito em execução, a sequência de exercícios é controlada pelo
-  // circuito — ignoramos troca de exercício por voz pra não desincronizar a meta.
-  if (circuitMode && isRunningSession) return;
-  for (const [key, aliases] of Object.entries(VOICE_EXERCISE_ALIASES)) {
-    if (key !== currentExerciseKey && aliases.some(a => t.includes(a))) {
-      exerciseSelect.value = key;
-      exerciseSelect.dispatchEvent(new Event('change'));
-      showToast(`🎙 Exercício: ${EXERCISES[key].label}`, '🔁');
-      return;
-    }
-  }
-}
-
-function initVoiceCommands() {
-  const SR = window.SpeechRecognition || window.webkitSpeechRecognition;
-  if (!SR) {
-    settingVoiceCmdToggle.checked = false;
-    settingVoiceCmdToggle.disabled = true;
-    voiceCmdDesc.textContent = 'Não suportado neste navegador (use Chrome/Edge).';
-    return;
-  }
-  recognition = new SR();
-  recognition.lang = 'pt-BR';
-  recognition.continuous = true;
-  recognition.interimResults = false;
-
-  recognition.onresult = (event) => {
-    const last = event.results[event.results.length - 1];
-    if (last && last[0]) handleVoiceCommand(last[0].transcript);
-  };
-  recognition.onerror = (event) => {
-    if (event.error === 'not-allowed' || event.error === 'service-not-allowed') {
-      showToast('Permissão de microfone negada para comandos de voz.', '🎙');
-      settingVoiceCmdToggle.checked = false;
-      stopVoiceCommands();
-    }
-    // 'no-speech' e 'aborted' são normais em escuta contínua; o onend cuida do restart.
-  };
-  recognition.onend = () => {
-    if (recognitionActive && !recognitionPausedForSpeech) {
-      try { recognition.start(); } catch (e) { /* já rodando */ }
-    }
-  };
-}
-
-function startVoiceCommands() {
-  if (!recognition || recognitionActive) return;
-  recognitionActive = true;
-  try {
-    recognition.start();
-    hudVoiceCmdBadge.style.display = 'inline-flex';
-  } catch (e) { /* já rodando */ }
-}
-
-function stopVoiceCommands() {
-  recognitionActive = false;
-  if (recognition) { try { recognition.stop(); } catch (e) { /* já parado */ } }
-  hudVoiceCmdBadge.style.display = 'none';
-}
-
-settingVoiceCmdToggle.addEventListener('change', () => {
-  if (settingVoiceCmdToggle.checked) startVoiceCommands(); else stopVoiceCommands();
-});
-
-function setFormAlert(text) {
-  if (text) {
-    formAlertBanner.style.display = 'flex'; formAlertText.textContent = text;
-    postureVal.textContent = 'ALERTA'; postureVal.style.color = 'var(--bad)';
-  } else {
-    formAlertBanner.style.display = 'none';
-    postureVal.textContent = 'OK'; postureVal.style.color = 'var(--accent)';
-  }
-}
-
-function updateSecondaryAngle(landmarks) {
-  const ex = currentExercise;
-  if (!ex.secondary || !settingMultiAngleToggle.checked) { secondaryAngleRow.style.display = 'none'; return null; }
-  const sA = landmarks[ex.secondary.a], sB = landmarks[ex.secondary.b], sC = landmarks[ex.secondary.c];
-  if (!sA || !sB || !sC) { secondaryAngleRow.style.display = 'none'; return null; }
-  const secAngle = calculateAngle(sA, sB, sC);
-  secondaryAngleRow.style.display = 'grid';
-  secondaryAngleLabel.textContent = 'Ângulo Secundário — ' + ex.secondary.name;
-  secondaryAngleVal.textContent = Math.round(secAngle) + '°';
-  return secAngle;
-}
-
-function checkFormIssues(landmarks, secondaryAngle) {
-  const ex = currentExercise;
-  let alertMsg = null;
-
-  if (ex.checkValgus) {
-    const lk = landmarks[25], rk = landmarks[26], la = landmarks[27], ra = landmarks[28];
-    if (lk && rk && la && ra) {
-      const kneeDist = Math.abs(lk.x - rk.x), ankleDist = Math.abs(la.x - ra.x);
-      if (ankleDist > 0.02 && kneeDist < ankleDist * 0.55) alertMsg = ex.messages.valgus;
-    }
-  }
-  if (!alertMsg && ex.checkPosture && secondaryAngle != null && secondaryAngle < 145) {
-    alertMsg = ex.messages.posture;
-  }
-  if (!alertMsg && ex.checkSpine && secondaryAngle != null && secondaryAngle < 160) {
-    alertMsg = ex.messages.spine;
-  }
-  if (!alertMsg && ex.checkCheating && secondaryAngle != null && secondaryAngle < 150) {
-    alertMsg = ex.messages.cheating;
-  }
-
-  setFormAlert(alertMsg);
-  if (alertMsg) speak(alertMsg.replace(/^[^\wÀ-ſ]+/, ''));
-}
-
-function downloadBlob(content, filename, mime) {
-  const blob = new Blob([content], { type: mime });
-  const url = URL.createObjectURL(blob);
-  const a = document.createElement('a');
-  a.href = url; a.download = filename; a.click();
-  URL.revokeObjectURL(url);
-}
-
-function exportHistoryCsv() {
-  const history = loadHistoryFromStorage();
-  if (history.length === 0) { showToast('Nenhum treino para exportar.', '⚠️'); return; }
-  const header = ['Data', 'Exercicio', 'RepsValidas', 'RepsComFalha', 'VBT', 'Precisao'];
-  const rows = history.map(s => [s.date, s.exercise, s.good, s.bad, s.vbtSpeed || 0, s.accuracy]);
-  const csv = [header, ...rows].map(r => r.map(v => `"${String(v).replace(/"/g, '""')}"`).join(',')).join('\n');
-  downloadBlob(csv, 'formacerta_historico.csv', 'text/csv');
-  showToast('Histórico exportado em CSV.', '📥');
-}
-
-function exportHistoryJson() {
-  const history = loadHistoryFromStorage();
-  if (history.length === 0) { showToast('Nenhum treino para exportar.', '⚠️'); return; }
-  downloadBlob(JSON.stringify(history, null, 2), 'formacerta_historico.json', 'application/json');
-  showToast('Histórico exportado em JSON.', '📄');
-}
-
-function startRecordingVideo() {
-  try {
-    const stream = overlayCanvas.captureStream(30);
-    recordedChunks = [];
-    mediaRecorder = new MediaRecorder(stream, { mimeType: 'video/webm;codecs=vp9' });
-    mediaRecorder.ondataavailable = (e) => { if (e.data.size > 0) recordedChunks.push(e.data); };
-    mediaRecorder.onstop = () => {
-      const blob = new Blob(recordedChunks, { type: 'video/webm' });
-      const url = URL.createObjectURL(blob);
-      const a = document.createElement('a');
-      a.href = url; a.download = `formacerta_${currentExerciseKey}_${Date.now()}.webm`; a.click();
-      URL.revokeObjectURL(url);
-      showToast('Vídeo com HUD salvo!', '💾');
-    };
-    mediaRecorder.start();
-    isRecordingVideo = true;
-    recordVideoBtn.classList.add('recording');
-    recordVideoBtn.innerHTML = '<span>⏹</span> Parar Gravação';
-    showToast('Gravação de vídeo iniciada.', '🔴');
-  } catch (err) {
-    showToast('Erro ao gravar vídeo: ' + err.message, '❌');
-  }
-}
-
-function stopRecordingVideo() {
-  if (mediaRecorder && mediaRecorder.state !== 'inactive') mediaRecorder.stop();
-  isRecordingVideo = false;
-  recordVideoBtn.classList.remove('recording');
-  recordVideoBtn.innerHTML = '<span>🔴</span> Gravar Vídeo HUD';
-}
-
-recordVideoBtn.addEventListener('click', () => {
-  if (!isRecordingVideo) startRecordingVideo(); else stopRecordingVideo();
-});
-document.getElementById('exportCsvBtn').addEventListener('click', exportHistoryCsv);
-document.getElementById('exportJsonBtn').addEventListener('click', exportHistoryJson);
-
-document.querySelectorAll('.tab-btn').forEach(btn => {
-  btn.addEventListener('click', () => {
-    document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
-    document.querySelectorAll('.tab-content').forEach(c => c.classList.remove('active'));
-    btn.classList.add('active');
-    const targetTab = document.getElementById(btn.dataset.tab);
-    if (targetTab) targetTab.classList.add('active');
-    if (btn.dataset.tab === 'tab-analytics') renderHistoryTable();
-  });
-});
-
-async function initMediaPipe() {
-  if (poseLandmarker) return;
-  try {
-    const vision = await FilesetResolver.forVisionTasks("https://cdn.jsdelivr.net/npm/@mediapipe/tasks-vision@0.10.14/wasm");
-    poseLandmarker = await PoseLandmarker.createFromOptions(vision, {
-      baseOptions: { modelAssetPath: "https://storage.googleapis.com/mediapipe-models/pose_landmarker/pose_landmarker_lite/float16/1/pose_landmarker_lite.task", delegate: "GPU" },
-      runningMode: "VIDEO", numPoses: 1
-    });
-  } catch (err) { showToast("Erro ao carregar IA: " + err.message, "❌"); throw err; }
-}
-
-exerciseSelect.addEventListener('change', () => {
-  currentExerciseKey = exerciseSelect.value; currentExercise = EXERCISES[currentExerciseKey];
-  angleLabelName.textContent = currentExercise.angleLabel; exerciseInstructionHint.textContent = currentExercise.instruction;
-  planeTag.textContent = currentExercise.plane;
-  
-  // Atualiza limiares de calibração
-  cfgGoodMin.value = currentExercise.goodMin;
-  cfgGoodMax.value = currentExercise.goodMax;
-  targetRangeTag.textContent = `Alvo: ${currentExercise.goodMin}° - ${currentExercise.goodMax}°`;
-  resetCounters();
-});
-
-cfgGoodMin.addEventListener('input', () => { currentExercise.goodMin = parseFloat(cfgGoodMin.value) || 70; targetRangeTag.textContent = `Alvo: ${currentExercise.goodMin}° - ${currentExercise.goodMax}°`; });
-cfgGoodMax.addEventListener('input', () => { currentExercise.goodMax = parseFloat(cfgGoodMax.value) || 100; targetRangeTag.textContent = `Alvo: ${currentExercise.goodMin}° - ${currentExercise.goodMax}°`; });
-
-function resetCounters() {
-  goodRepsCount = 0; badRepsCount = 0; goodRepsVal.textContent = 0; badRepsVal.textContent = 0;
-  repPhase = 'up'; reachedGoodDepth = false; reachedAnyDepth = false; sparklineData = [];
-  vbtVal.textContent = '0 °/s'; fatigueVal.textContent = '0%';
-  firstRepVbtSpeed = 0; currentVbtSpeed = 0; lastVoiceSpeech = '';
-  setFormAlert(null);
-  secondaryAngleRow.style.display = 'none';
-  setStatusBanner('idle', 'Aguardando início do movimento');
-}
-
-function setStatusBanner(type, text) {
-  statusBanner.className = 'status-banner ' + type;
-  statusBanner.innerHTML = `<span>${type === 'good' ? '✓' : type === 'bad' ? '⚠️' : 'ℹ️'}</span> ${text}`;
-}
-
-// ==================== MODO CIRCUITO ====================
-function addCircuitStepRow(exerciseKey, reps) {
-  circuitStepUid++;
-  const row = document.createElement('div');
-  row.className = 'circuit-step-row';
-  row.innerHTML = `
-    <span class="circuit-step-num"></span>
-    <select class="circuit-step-exercise">
-      ${Object.entries(EXERCISES).map(([k, e]) => `<option value="${k}"${k === exerciseKey ? ' selected' : ''}>${e.label}</option>`).join('')}
-    </select>
-    <div class="circuit-step-reps-wrap"><span>reps</span><input type="number" class="circuit-step-reps" min="1" max="50" value="${reps}"></div>
-    <button type="button" class="circuit-step-remove" title="Remover">✕</button>
-  `;
-  row.querySelector('.circuit-step-remove').addEventListener('click', () => { row.remove(); renumberCircuitSteps(); });
-  circuitStepsList.appendChild(row);
-  renumberCircuitSteps();
-}
-
-function renumberCircuitSteps() {
-  const rows = circuitStepsList.querySelectorAll('.circuit-step-row');
-  rows.forEach((row, i) => { row.querySelector('.circuit-step-num').textContent = (i + 1) + '.'; });
-  circuitStepsCount.textContent = rows.length + (rows.length === 1 ? ' exercício' : ' exercícios');
-}
-
-function buildCircuitStepsFromUI() {
-  const rows = circuitStepsList.querySelectorAll('.circuit-step-row');
-  const steps = [];
-  rows.forEach(row => {
-    const exercise = row.querySelector('.circuit-step-exercise').value;
-    const reps = Math.max(1, parseInt(row.querySelector('.circuit-step-reps').value, 10) || 10);
-    steps.push({ exercise, reps });
-  });
-  return steps;
-}
-
-addCircuitStepBtn.addEventListener('click', () => addCircuitStepRow('squat', 10));
-
-document.querySelectorAll('.mode-tab').forEach(btn => {
-  btn.addEventListener('click', () => {
-    document.querySelectorAll('.mode-tab').forEach(b => b.classList.remove('active'));
-    btn.classList.add('active');
-    circuitModeActive = btn.dataset.mode === 'circuit';
-    singleModeGroup.style.display = circuitModeActive ? 'none' : 'flex';
-    circuitBuilderCard.style.display = circuitModeActive ? 'block' : 'none';
-  });
-});
-
-// Circuito de exemplo pré-carregado
-addCircuitStepRow('squat', 10);
-addCircuitStepRow('pushup', 10);
-addCircuitStepRow('lunge', 10);
-
-function renderCircuitProgress() {
-  const finished = circuitIndex >= circuitSteps.length;
-  circuitStepCounter.textContent = finished ? 'Circuito completo! 🏆' : `Exercício ${circuitIndex + 1} de ${circuitSteps.length}`;
-  skipExerciseBtn.style.display = finished ? 'none' : 'inline-flex';
-  circuitProgressList.innerHTML = circuitSteps.map((step, i) => {
-    const state = i < circuitIndex ? 'done' : (i === circuitIndex ? 'active' : '');
-    let count;
-    if (i < circuitIndex) count = circuitResults[i] ? circuitResults[i].good : step.reps;
-    else if (i === circuitIndex) count = goodRepsCount;
-    else count = 0;
-    return `<div class="circuit-progress-item ${state}">
-      <span>${state === 'done' ? '✓ ' : ''}${EXERCISES[step.exercise].label}</span>
-      <span class="badge">${count}/${step.reps}</span>
-    </div>`;
-  }).join('');
-}
-
-function startRestPeriod(nextStep) {
-  const restSeconds = getCircuitRestSeconds();
-  if (restSeconds <= 0) { endRestPeriod(); return; }
-  inRestPeriod = true;
-  restTimeLeft = restSeconds;
-  restNextExerciseName.textContent = EXERCISES[nextStep.exercise].label;
-  restCountdownVal.textContent = restTimeLeft;
-  restOverlay.style.display = 'flex';
-  clearInterval(restTimerHandle);
-  restTimerHandle = setInterval(() => {
-    restTimeLeft--;
-    restCountdownVal.textContent = Math.max(0, restTimeLeft);
-    if (restTimeLeft > 0 && restTimeLeft <= 3) playSoundTone(500, 'sine', 0.08);
-    if (restTimeLeft <= 0) endRestPeriod();
-  }, 1000);
-}
-
-function endRestPeriod() {
-  clearInterval(restTimerHandle); restTimerHandle = null;
-  inRestPeriod = false;
-  restOverlay.style.display = 'none';
-  const step = circuitSteps[circuitIndex];
-  if (!step) return;
-  exerciseSelect.value = step.exercise;
-  exerciseSelect.dispatchEvent(new Event('change'));
-  renderCircuitProgress();
-  playSoundTone(660, 'sine', 0.15);
-  speak('Pode começar');
-}
-
-function advanceCircuit() {
-  const step = circuitSteps[circuitIndex];
-  if (!step) return;
-  circuitResults[circuitIndex] = { exercise: step.exercise, label: EXERCISES[step.exercise].label, good: goodRepsCount, bad: badRepsCount, target: step.reps };
-  circuitIndex++;
-
-  if (circuitIndex >= circuitSteps.length) {
-    finishCircuit();
-    return;
-  }
-  const nextStep = circuitSteps[circuitIndex];
-  showToast(`✅ ${EXERCISES[step.exercise].label} concluído!`, '🎉');
-  speak(`Muito bem! Descanse. Próximo: ${EXERCISES[nextStep.exercise].label}`);
-  renderCircuitProgress();
-  startRestPeriod(nextStep);
-}
-
-function saveCircuitSessionToDatabase(results) {
-  const totalGood = results.reduce((s, r) => s + r.good, 0);
-  const totalBad = results.reduce((s, r) => s + r.bad, 0);
-  const history = loadHistoryFromStorage();
-  history.unshift({
-    id: Date.now(),
-    date: new Date().toLocaleString('pt-BR'),
-    type: 'circuit',
-    exercise: `Circuito (${results.length} exercícios)`,
-    steps: results,
-    good: totalGood,
-    bad: totalBad,
-    vbtSpeed: currentVbtSpeed,
-    accuracy: Math.round((totalGood / (totalGood + totalBad)) * 100) || 0
-  });
-  localStorage.setItem(STORAGE_KEY, JSON.stringify(history.slice(0, 50)));
-}
-
-function finishCircuit() {
-  renderCircuitProgress();
-  showToast('🏆 Circuito completo!', '🏆');
-  speak('Parabéns! Você completou o circuito.');
-  saveCircuitSessionToDatabase(circuitResults);
-  skipAutoSaveOnStop = true;
-  stopSession();
-  skipAutoSaveOnStop = false;
-}
-
-skipExerciseBtn.addEventListener('click', () => {
-  if (inRestPeriod) endRestPeriod(); else advanceCircuit();
-});
-skipRestBtn.addEventListener('click', endRestPeriod);
-
-startCamBtn.addEventListener('click', async () => {
-  if (circuitModeActive) {
-    const steps = buildCircuitStepsFromUI();
-    if (steps.length === 0) { showToast('Adicione pelo menos um exercício ao circuito.', '⚠️'); return; }
-    circuitSteps = steps; circuitIndex = 0; circuitResults = []; circuitMode = true;
-    exerciseSelect.value = circuitSteps[0].exercise;
-    exerciseSelect.dispatchEvent(new Event('change'));
-  } else {
-    circuitMode = false;
-  }
-  // Clique é um gesto do usuário válido pra pedir permissão de microfone também,
-  // então aproveitamos pra ligar o reconhecimento de voz se estiver habilitado.
-  if (settingVoiceCmdToggle.checked) startVoiceCommands();
-  startCamBtn.disabled = true; startCamBtn.innerHTML = '<span>⏳</span> Carregando IA...';
-  try {
-    await initMediaPipe();
-    const stream = await navigator.mediaDevices.getUserMedia({ video: { width: 1280, height: 720, facingMode: "user" } });
-    videoElement.srcObject = stream; await videoElement.play();
-    isVideoFileMode = false; videoFileControls.style.display = 'none';
-    startSessionUI();
-    if (circuitMode) {
-      circuitBuilderCard.style.display = 'none';
-      circuitProgressPanel.style.display = 'block';
-      renderCircuitProgress();
-    }
-  } catch (err) {
-    circuitMode = false;
-    startCamBtn.disabled = false; startCamBtn.innerHTML = '<span>📷</span> Iniciar Câmera'; showToast("Sem acesso à câmera: " + err.message, "❌");
-  }
-});
-
-videoFileInput.addEventListener('change', async (e) => {
-  const file = e.target.files[0]; if (!file) return;
-  startCamBtn.disabled = true;
-  try {
-    await initMediaPipe();
-    const url = URL.createObjectURL(file);
-    videoElement.srcObject = null; videoElement.src = url;
-    await videoElement.play(); isVideoFileMode = true; videoFileControls.style.display = 'flex';
-    startSessionUI(); showToast(`Vídeo "${file.name}" carregado!`, "🎬");
-  } catch (err) { startCamBtn.disabled = false; showToast("Erro ao ler vídeo: " + err.message, "❌"); }
-});
-
-function startSessionUI() {
-  placeholder.style.display = 'none'; videoElement.style.display = 'block';
-  overlayCanvas.width = videoElement.videoWidth || 640; overlayCanvas.height = videoElement.videoHeight || 480;
-  stopBtn.style.display = 'inline-flex'; recordVideoBtn.style.display = 'inline-flex'; startCamBtn.style.display = 'none';
-  videoFileInput.parentElement.style.display = 'none';
-  hudStatusBadge.className = 'hud-badge recording'; hudStatusText.textContent = 'Analisando Movimento'; hudFpsBadge.style.display = 'inline-flex';
-  isRunning = true; resetCounters(); requestAnimationFrame(processFrame);
-}
-
-stopBtn.addEventListener('click', stopSession);
-function stopSession() {
-  if (isRecordingVideo) stopRecordingVideo();
-  if (restTimerHandle) { clearInterval(restTimerHandle); restTimerHandle = null; }
-  inRestPeriod = false; restOverlay.style.display = 'none';
-  isRunning = false;
-  if (videoElement.srcObject) { videoElement.srcObject.getTracks().forEach(t => t.stop()); videoElement.srcObject = null; }
-  videoElement.style.display = 'none'; placeholder.style.display = 'flex'; ctx.clearRect(0, 0, overlayCanvas.width, overlayCanvas.height);
-  stopBtn.style.display = 'none'; recordVideoBtn.style.display = 'none'; startCamBtn.style.display = 'inline-flex'; startCamBtn.disabled = false;
-  startCamBtn.innerHTML = '<span>📷</span> Iniciar Câmera'; videoFileInput.parentElement.style.display = 'inline-block';
-  videoFileControls.style.display = 'none'; hudStatusBadge.className = 'hud-badge offline'; hudStatusText.textContent = 'Câmera Desligada'; hudFpsBadge.style.display = 'none';
-  if (!skipAutoSaveOnStop && goodRepsCount + badRepsCount > 0) { saveSessionToDatabase(); showToast("Sessão salva nos relatórios VBT!", "💾"); }
-  setStatusBanner('idle', 'Sessão encerrada.');
-
-  // Se o circuito terminou com sucesso (via finishCircuit), deixamos o checklist
-  // completo visível em vez de escondê-lo imediatamente — só limpamos a tela se
-  // a sessão foi interrompida no meio (parada manual ou por comando de voz).
-  const circuitFinishedSuccessfully = circuitMode && circuitIndex >= circuitSteps.length;
-  if (!circuitFinishedSuccessfully) {
-    circuitProgressPanel.style.display = 'none';
-    if (circuitModeActive) circuitBuilderCard.style.display = 'block';
-  }
-  circuitMode = false;
-}
-
-function processFrame() {
-  if (!isRunning) return;
-  const now = performance.now(); frameCount++;
-  if (now - lastFrameTime >= 1000) {
-    currentFps = Math.round((frameCount * 1000) / (now - lastFrameTime));
-    fpsVal.textContent = currentFps; frameCount = 0; lastFrameTime = now;
-  }
-  if (videoElement.readyState >= 2) {
-    if (overlayCanvas.width !== videoElement.videoWidth) {
-      overlayCanvas.width = videoElement.videoWidth; overlayCanvas.height = videoElement.videoHeight;
-    }
-    const results = poseLandmarker.detectForVideo(videoElement, performance.now());
-    renderBiomechanicsHUD(results);
-  }
-  requestAnimationFrame(processFrame);
-}
-
-function renderBiomechanicsHUD(results) {
-  ctx.clearRect(0, 0, overlayCanvas.width, overlayCanvas.height);
-  
-  if (isRecordingVideo) {
-    ctx.drawImage(videoElement, 0, 0, overlayCanvas.width, overlayCanvas.height);
-  }
-
-  const landmarks = results.landmarks && results.landmarks[0];
-  if (!landmarks) {
-    setStatusBanner('idle', 'Nenhuma pessoa identificada.');
-    currentAngleVal.textContent = '—'; return;
-  }
-  const ex = currentExercise;
-  const pA = landmarks[ex.points.a], pB = landmarks[ex.points.b], pC = landmarks[ex.points.c];
-  if (!pA || !pB || !pC) return;
-
-  const angle = calculateAngle(pA, pB, pC); const roundedAngle = Math.round(angle);
-  currentAngleVal.textContent = roundedAngle + '°';
-
-  // Cálculo de VBT (Velocidade Angular Concêntrica)
-  const now = performance.now();
-  const dt = (now - lastAngleTime) / 1000;
-  if (dt > 0.05) {
-    const dAngle = Math.abs(roundedAngle - lastAngleVal);
-    currentVbtSpeed = Math.round(dAngle / dt);
-    vbtVal.textContent = currentVbtSpeed + ' °/s';
-    
-    if (goodRepsCount === 1 && firstRepVbtSpeed === 0 && currentVbtSpeed > 30) {
-      firstRepVbtSpeed = currentVbtSpeed;
-    }
-    if (firstRepVbtSpeed > 0 && currentVbtSpeed > 0) {
-      const loss = Math.max(0, Math.round(((firstRepVbtSpeed - currentVbtSpeed) / firstRepVbtSpeed) * 100));
-      fatigueVal.textContent = loss + '%';
-    }
-    lastAngleTime = now;
-    lastAngleVal = roundedAngle;
-  }
-
-  sparklineData.push(roundedAngle); if (sparklineData.length > 60) sparklineData.shift(); drawSparkline();
-  drawSkeletonConnections(landmarks, pA, pB, pC);
-  drawAngleArc(pA, pB, pC, roundedAngle);
-
-  // Renderiza Visualizador 3D Rotacionável
-  render3DSkeleton(landmarks);
-
-  // Atualiza Heatmap Muscular
-  updateMuscleHeatmap(roundedAngle);
-
-  const secondaryAngle = updateSecondaryAngle(landmarks);
-  checkFormIssues(landmarks, secondaryAngle);
-
-  evaluateRepetitionPhase(angle);
-}
-
-function drawSkeletonConnections(landmarks, pA, pB, pC) {
-  const w = overlayCanvas.width, h = overlayCanvas.height;
-  ctx.lineWidth = 5; ctx.strokeStyle = '#c8ff4d';
-  ctx.beginPath(); ctx.moveTo(pA.x * w, pA.y * h); ctx.lineTo(pB.x * w, pB.y * h); ctx.lineTo(pC.x * w, pC.y * h); ctx.stroke();
-  [pA, pB, pC].forEach((p, idx) => {
-    ctx.fillStyle = idx === 1 ? '#00f2fe' : '#c8ff4d';
-    ctx.beginPath(); ctx.arc(p.x * w, p.y * h, idx === 1 ? 9 : 6, 0, 2 * Math.PI); ctx.fill();
-    ctx.strokeStyle = '#07090c'; ctx.lineWidth = 2; ctx.stroke();
-  });
-}
-
-function drawAngleArc(pA, pB, pC, angleVal) {
-  const w = overlayCanvas.width, h = overlayCanvas.height, bx = pB.x * w, by = pB.y * h;
-  ctx.font = '700 14px "JetBrains Mono", monospace';
-  const textWidth = ctx.measureText(angleVal + '°').width;
-  ctx.fillStyle = 'rgba(7, 9, 12, 0.85)';
-  ctx.beginPath(); ctx.roundRect(bx + 12, by - 16, textWidth + 16, 26, 6); ctx.fill();
-  ctx.strokeStyle = '#00f2fe'; ctx.lineWidth = 1; ctx.stroke();
-  ctx.fillStyle = '#00f2fe'; ctx.fillText(angleVal + '°', bx + 20, by + 2);
-}
-
-// ==================== VISUALIZADOR 3D ROTACIONÁVEL ====================
-function render3DSkeleton(landmarks) {
-  const w = canvas3D.width = canvas3D.clientWidth;
-  const h = canvas3D.height = canvas3D.clientHeight;
-  ctx3D.clearRect(0, 0, w, h);
-
-  const rotAngleDeg = parseFloat(slider3DRotation.value) || 45;
-  const rad = rotAngleDeg * (Math.PI / 180);
-  const cosR = Math.cos(rad), sinR = Math.sin(rad);
-
-  const keyConnections = [
-    [11, 12], [11, 13], [13, 15], [12, 14], [14, 16],
-    [11, 23], [12, 24], [23, 24], [23, 25], [24, 26],
-    [25, 27], [26, 28]
-  ];
-
-  ctx3D.strokeStyle = '#00f2fe';
-  ctx3D.lineWidth = 2;
-
-  keyConnections.forEach(([i1, i2]) => {
-    const p1 = landmarks[i1], p2 = landmarks[i2];
-    if (!p1 || !p2) return;
-
-    // Rotação 3D em torno do eixo Y
-    const x1 = (p1.x - 0.5) * cosR - (p1.z || 0) * sinR + 0.5;
-    const x2 = (p2.x - 0.5) * cosR - (p2.z || 0) * sinR + 0.5;
-
-    ctx3D.beginPath();
-    ctx3D.moveTo(x1 * w, p1.y * h);
-    ctx3D.lineTo(x2 * w, p2.y * h);
-    ctx3D.stroke();
-  });
-}
-
-// ==================== HEATMAP MUSCULAR ====================
-function updateMuscleHeatmap(angle) {
-  const ex = currentExercise;
-  const isPeakEffort = (angle <= ex.goodMin + 15);
-  
-  document.querySelectorAll('.muscle-badge').forEach(b => {
-    const target = b.dataset.muscle;
-    if (ex.muscles && ex.muscles.includes(target) && isPeakEffort) {
-      b.classList.add('active');
-    } else {
-      b.classList.remove('active');
-    }
-  });
-}
-
-function evaluateRepetitionPhase(angle) {
-  if (inRestPeriod) return; // pausa a contagem durante o descanso entre exercícios do circuito
-  const ex = currentExercise;
-  // "direction: 'up'" cobre exercícios onde o ângulo AUMENTA durante o esforço
-  // (ex: elevação lateral, que sai de ~25° parado e sobe até ~90°) — o padrão
-  // ('down', implícito) cobre agachamento/flexão/rosca/afundo, que partem de um
-  // ângulo alto (braço/perna estendida) e DIMINUEM durante o esforço.
-  const inverted = ex.direction === 'up';
-  const atRest = inverted ? (angle < ex.standing) : (angle > ex.standing);
-
-  if (atRest) {
-    if (repPhase === 'down') {
-      if (reachedGoodDepth) {
-        goodRepsCount++; goodRepsVal.textContent = goodRepsCount;
-        setStatusBanner('good', `${ex.label} Completo! ✓`);
-        playSoundTone(660, 'sine', 0.12); speak('Repetição válida');
-        if (circuitMode) {
-          renderCircuitProgress();
-          const target = circuitSteps[circuitIndex] ? circuitSteps[circuitIndex].reps : Infinity;
-          if (goodRepsCount >= target) { advanceCircuit(); return; }
-        }
-      } else if (reachedAnyDepth) {
-        badRepsCount++; badRepsVal.textContent = badRepsCount;
-        setStatusBanner('bad', ex.messages.shallow); playSoundTone(220, 'triangle', 0.25);
-        speak('Repita com mais amplitude');
-      }
-    }
-    repPhase = 'up'; reachedGoodDepth = false; reachedAnyDepth = false; return;
-  }
-  if (repPhase === 'up') { repPhase = 'down'; phaseStartTime = performance.now(); }
-  reachedAnyDepth = true;
-
-  const inGoodRange = angle >= ex.goodMin && angle <= ex.goodMax;
-  const pastGoodRange = inverted ? angle > ex.goodMax : angle < ex.goodMin;
-
-  if (inGoodRange) {
-    reachedGoodDepth = true; setStatusBanner('good', ex.messages.good);
-  } else if (pastGoodRange) {
-    setStatusBanner('warn', ex.messages.tooDeep);
-  } else {
-    setStatusBanner('warn', ex.messages.down);
-  }
-}
-
-function drawSparkline() {
-  const w = sparklineCanvas.width = sparklineCanvas.clientWidth, h = sparklineCanvas.height = sparklineCanvas.clientHeight;
-  sCtx.clearRect(0, 0, w, h); if (sparklineData.length < 2) return;
-  sCtx.beginPath(); sCtx.strokeStyle = '#c8ff4d'; sCtx.lineWidth = 2;
-  sparklineData.forEach((val, i) => {
-    const x = (i / (sparklineData.length - 1)) * w, y = h - ((val - 30) / 150) * h;
-    if (i === 0) sCtx.moveTo(x, y); else sCtx.lineTo(x, y);
-  });
-  sCtx.stroke();
-}
-
-function loadHistoryFromStorage() {
-  try { return JSON.parse(localStorage.getItem(STORAGE_KEY) || '[]'); } catch (e) { return []; }
-}
-
-function saveSessionToDatabase() {
-  const history = loadHistoryFromStorage();
-  history.unshift({
-    id: Date.now(), date: new Date().toLocaleString('pt-BR'),
-    exercise: currentExercise.label, good: goodRepsCount, bad: badRepsCount,
-    vbtSpeed: currentVbtSpeed,
-    accuracy: Math.round((goodRepsCount / (goodRepsCount + badRepsCount)) * 100) || 0
-  });
-  localStorage.setItem(STORAGE_KEY, JSON.stringify(history.slice(0, 50)));
-}
-
-function renderHistoryTable() {
-  const history = loadHistoryFromStorage();
-  statTotalSessions.textContent = history.length;
-  let totalVbt = 0;
-  history.forEach(s => { totalVbt += (s.vbtSpeed || 0); });
-  statAvgVbt.textContent = (history.length > 0 ? Math.round(totalVbt / history.length) : 0) + ' °/s';
-  
-  if (history.length === 0) {
-    historyTableBody.innerHTML = `<tr><td colspan="7" style="text-align:center; color:var(--muted); padding:30px;">Nenhum treino gravado ainda. Realize um exercício na aba "Análise Ao Vivo".</td></tr>`;
-    return;
-  }
-  historyTableBody.innerHTML = history.map(item => `
-    <tr>
-      <td style="font-family:var(--font-mono); font-size:12px;">${item.date}</td>
-      <td><b>${item.exercise}</b>${item.type === 'circuit' && item.steps ? `<div style="font-size:11px; color:var(--muted); margin-top:3px;">${item.steps.map(s => `${s.label} (${s.good}/${s.target})`).join(' → ')}</div>` : ''}</td>
-      <td style="color:var(--accent); font-weight:700;">${item.good}</td>
-      <td style="color:var(--bad); font-weight:700;">${item.bad}</td>
-      <td style="color:var(--cyan); font-weight:700;">${item.vbtSpeed || 0} °/s</td>
-      <td style="font-family:var(--font-mono); font-weight:700;">${item.accuracy}%</td>
-      <td><button onclick="deleteSessionItem(${item.id})" class="btn btn-danger" style="padding:4px 8px; font-size:11px;">Excluir</button></td>
-    </tr>
-  `).join('');
-}
-
-window.deleteSessionItem = function(id) {
-  let history = loadHistoryFromStorage().filter(h => h.id !== id);
-  localStorage.setItem(STORAGE_KEY, JSON.stringify(history));
-  renderHistoryTable(); showToast("Registro excluído.", "🗑");
-};
-
-document.getElementById('clearHistoryBtn').addEventListener('click', () => {
-  if (confirm("Deseja apagar o histórico de treinos VBT?")) {
-    localStorage.removeItem(STORAGE_KEY); renderHistoryTable(); showToast("Histórico limpo.", "🗑");
-  }
-});
-
-// Modal Laudo
-document.getElementById('generateLaudoBtn').addEventListener('click', openLaudoModal);
-function openLaudoModal() {
-  const history = loadHistoryFromStorage();
-  const latest = history[0] || { exercise: currentExercise.label, good: goodRepsCount, bad: badRepsCount, accuracy: 100, vbtSpeed: currentVbtSpeed };
-  laudoExerciseName.textContent = latest.exercise;
-  laudoScoreVal.textContent = latest.accuracy + '%';
-  laudoRepsVal.textContent = `${latest.good} Válidas / ${latest.bad} Incorretas`;
-  laudoVbtVal.textContent = (latest.vbtSpeed || 0) + ' °/s';
-  laudoModal.classList.add('active');
-}
-window.closeLaudoModal = function() { laudoModal.classList.remove('active'); };
-
-exerciseSelect.dispatchEvent(new Event('change'));
-initVoiceCommands();
-</script>
+<!-- Ponto de entrada único. O mapa dos módulos está em js/main.js -->
+<script type="module" src="js/main.js"></script>
 </body>
 </html>
