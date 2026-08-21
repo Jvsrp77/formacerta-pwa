@@ -103,6 +103,12 @@ function startSession() {
   stage.placeholder.style.display = 'none';
   stage.video.style.display = 'block';
 
+  // Espelha a câmera ao vivo (efeito "espelho", como o usuário se vê
+  // na tela) — mas não um vídeo de arquivo carregado, cujo lado
+  // esquerdo/direito já é o real e não deve ser invertido.
+  stage.video.classList.toggle('flipped', !state.isVideoFileMode);
+  stage.overlayCanvas.classList.toggle('flipped', !state.isVideoFileMode);
+
   stage.overlayCanvas.width = stage.video.videoWidth || 640;
   stage.overlayCanvas.height = stage.video.videoHeight || 480;
 

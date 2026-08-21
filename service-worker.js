@@ -3,7 +3,7 @@
 // IMPORTANTE: ao adicionar um arquivo CSS ou JS novo ao projeto,
 // inclua-o em APP_SHELL e incremente CACHE_NAME — senão o app
 // instalado continuará servindo a versão antiga do cache.
-const CACHE_NAME = 'formacerta-ai-v4';
+const CACHE_NAME = 'formacerta-ai-v5';
 
 const APP_SHELL = [
   './index.html',
