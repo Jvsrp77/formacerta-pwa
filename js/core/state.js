@@ -17,9 +17,10 @@ export const state = {
   isRunning: false,
   isVideoFileMode: false,
 
-  /* --- Exercício ativo (dono: ui/exercise-selector.js) --- */
+  /* --- Exercício ativo (dono: ui/exercise-selector.js / pipeline/etapa3-biomecanica.js) --- */
   currentExerciseKey: 'squat',
   currentExercise: EXERCISES.squat,
+  activeSide: 'right', // 'right' | 'left' (lado ativo sob análise)
 
   /* --- Máquina de estados da repetição (dono: pipeline/etapa4-repeticoes.js) --- */
   repPhase: 'up',          // 'up' = em repouso | 'down' = em esforço
@@ -73,5 +74,6 @@ export function resetSeriesState() {
   state.sparklineData = [];
   state.firstRepVbtSpeed = 0;
   state.currentVbtSpeed = 0;
+  state.activeSide = 'right';
   state.lastVoiceSpeech = '';
 }

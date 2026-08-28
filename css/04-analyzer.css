@@ -19,7 +19,8 @@ video, canvas.overlay-canvas { position: absolute; top: 0; left: 0; width: 100%;
 video#videoElement { transform: scaleX(-1); }
 video#videoElement.unflipped { transform: scaleX(1) !important; }
 video#videoElement.flipped { transform: scaleX(-1) !important; }
-.flipped { transform: scaleX(-1); }
+canvas.overlay-canvas { transform: none !important; }
+
 
 .stage-placeholder {
   display: flex; flex-direction: column; align-items: center; justify-content: center;
