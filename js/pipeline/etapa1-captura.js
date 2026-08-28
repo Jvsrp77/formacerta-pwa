@@ -58,6 +58,8 @@ export async function startCameraSession() {
     await stage.video.play();
 
     state.isVideoFileMode = false;
+    stage.video.classList.remove('unflipped');
+    stage.video.classList.add('flipped');
     videoFile.controls.style.display = 'none';
 
     startSession();
@@ -86,6 +88,9 @@ export async function startVideoFileSession(file) {
     await stage.video.play();
 
     state.isVideoFileMode = true;
+    stage.video.classList.add('unflipped');
+    stage.video.classList.remove('flipped');
+    if (controls.flipCamBtn) controls.flipCamBtn.style.display = 'none';
     videoFile.controls.style.display = 'flex';
 
     startSession();
@@ -108,6 +113,9 @@ function startSession() {
 
   controls.stopBtn.style.display = 'inline-flex';
   controls.recordVideoBtn.style.display = 'inline-flex';
+  if (!state.isVideoFileMode && controls.flipCamBtn) {
+    controls.flipCamBtn.style.display = 'inline-flex';
+  }
   controls.startCamBtn.style.display = 'none';
   controls.videoFileInput.parentElement.style.display = 'none';
 
@@ -142,6 +150,7 @@ export function stopSession() {
 
   controls.stopBtn.style.display = 'none';
   controls.recordVideoBtn.style.display = 'none';
+  if (controls.flipCamBtn) controls.flipCamBtn.style.display = 'none';
   controls.startCamBtn.style.display = 'inline-flex';
   controls.startCamBtn.disabled = false;
   controls.startCamBtn.innerHTML = '<span>📷</span> Iniciar Câmera';
@@ -189,4 +198,18 @@ export function bindCaptureControls() {
   controls.videoFileInput.addEventListener('change', (event) => {
     startVideoFileSession(event.target.files[0]);
   });
+  if (controls.flipCamBtn) {
+    controls.flipCamBtn.addEventListener('click', () => {
+      const isCurrentlyFlipped = !stage.video.classList.contains('unflipped');
+      if (isCurrentlyFlipped) {
+        stage.video.classList.add('unflipped');
+        stage.video.classList.remove('flipped');
+        showToast('Espelhamento desativado', '🪞');
+      } else {
+        stage.video.classList.remove('unflipped');
+        stage.video.classList.add('flipped');
+        showToast('Espelhamento ativado', '🪞');
+      }
+    });
+  }
 }

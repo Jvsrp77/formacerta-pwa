@@ -26,28 +26,42 @@ export function clearOverlay() {
   ctx.clearRect(0, 0, canvas.width, canvas.height);
 }
 
+function isVideoFlipped() {
+  if (stage.video.classList.contains('unflipped')) return false;
+  return stage.video.classList.contains('flipped') || !stage.video.currentSrc;
+}
+
 /** Copia o frame atual do vídeo para o canvas (usado na gravação). */
 export function drawVideoFrame() {
-  ctx.drawImage(stage.video, 0, 0, canvas.width, canvas.height);
+  if (isVideoFlipped()) {
+    ctx.save();
+    ctx.scale(-1, 1);
+    ctx.drawImage(stage.video, -canvas.width, 0, canvas.width, canvas.height);
+    ctx.restore();
+  } else {
+    ctx.drawImage(stage.video, 0, 0, canvas.width, canvas.height);
+  }
 }
 
 /** Traça o segmento A→B→C e destaca a articulação-pivô (B). */
 export function drawSkeletonSegment(pA, pB, pC) {
   const w = canvas.width, h = canvas.height;
+  const flipped = isVideoFlipped();
+  const getX = (p) => (flipped ? (1 - p.x) : p.x) * w;
 
   ctx.lineWidth = 5;
   ctx.strokeStyle = HUD_COLORS.primary;
   ctx.beginPath();
-  ctx.moveTo(pA.x * w, pA.y * h);
-  ctx.lineTo(pB.x * w, pB.y * h);
-  ctx.lineTo(pC.x * w, pC.y * h);
+  ctx.moveTo(getX(pA), pA.y * h);
+  ctx.lineTo(getX(pB), pB.y * h);
+  ctx.lineTo(getX(pC), pC.y * h);
   ctx.stroke();
 
   [pA, pB, pC].forEach((p, idx) => {
     const isPivot = idx === 1;
     ctx.fillStyle = isPivot ? HUD_COLORS.pivot : HUD_COLORS.primary;
     ctx.beginPath();
-    ctx.arc(p.x * w, p.y * h, isPivot ? 9 : 6, 0, 2 * Math.PI);
+    ctx.arc(getX(p), p.y * h, isPivot ? 9 : 6, 0, 2 * Math.PI);
     ctx.fill();
     ctx.strokeStyle = HUD_COLORS.outline;
     ctx.lineWidth = 2;
@@ -58,7 +72,9 @@ export function drawSkeletonSegment(pA, pB, pC) {
 /** Etiqueta com o ângulo em graus, ancorada ao lado da articulação. */
 export function drawAngleBadge(pB, angleValue) {
   const w = canvas.width, h = canvas.height;
-  const bx = pB.x * w, by = pB.y * h;
+  const flipped = isVideoFlipped();
+  const bx = (flipped ? (1 - pB.x) : pB.x) * w;
+  const by = pB.y * h;
   const label = angleValue + '°';
 
   ctx.font = '700 14px "JetBrains Mono", monospace';
