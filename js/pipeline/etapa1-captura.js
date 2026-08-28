@@ -30,14 +30,17 @@ import {
 } from '../features/circuit.js';
 
 /* ---------------------------------------------------------------
-   Espelhamento — sincroniza vídeo E o canvas do esqueleto juntos.
-   Nunca alterne as classes de um sem o outro: se só o vídeo vira,
-   o esqueleto desenhado por cima fica do lado errado do corpo.
+   Espelhamento — fonte única de verdade pras classes .flipped /
+   .unflipped no <video>. O canvas do esqueleto NÃO é espelhado via
+   CSS (css/04-analyzer.css força transform:none nele) — em vez
+   disso, js/render/hud-overlay.js espelha as coordenadas dos
+   pontos ao desenhar (via isVideoFlipped(), que lê essas mesmas
+   classes), o que mantém o texto do HUD (ângulo em graus) legível
+   em vez de espelhado. Por isso só o vídeo é alterado aqui.
    --------------------------------------------------------------- */
 function setMirrored(isMirrored) {
   stage.video.classList.toggle('flipped', isMirrored);
   stage.video.classList.toggle('unflipped', !isMirrored);
-  stage.overlayCanvas.classList.toggle('flipped', isMirrored);
 }
 
 /* ---------------------------------------------------------------
