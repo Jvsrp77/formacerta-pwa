@@ -30,6 +30,17 @@ import {
 } from '../features/circuit.js';
 
 /* ---------------------------------------------------------------
+   Espelhamento — sincroniza vídeo E o canvas do esqueleto juntos.
+   Nunca alterne as classes de um sem o outro: se só o vídeo vira,
+   o esqueleto desenhado por cima fica do lado errado do corpo.
+   --------------------------------------------------------------- */
+function setMirrored(isMirrored) {
+  stage.video.classList.toggle('flipped', isMirrored);
+  stage.video.classList.toggle('unflipped', !isMirrored);
+  stage.overlayCanvas.classList.toggle('flipped', isMirrored);
+}
+
+/* ---------------------------------------------------------------
    1.a — Início pela webcam
    --------------------------------------------------------------- */
 export async function startCameraSession() {
@@ -58,8 +69,6 @@ export async function startCameraSession() {
     await stage.video.play();
 
     state.isVideoFileMode = false;
-    stage.video.classList.remove('unflipped');
-    stage.video.classList.add('flipped');
     videoFile.controls.style.display = 'none';
 
     startSession();
@@ -88,8 +97,6 @@ export async function startVideoFileSession(file) {
     await stage.video.play();
 
     state.isVideoFileMode = true;
-    stage.video.classList.add('unflipped');
-    stage.video.classList.remove('flipped');
     if (controls.flipCamBtn) controls.flipCamBtn.style.display = 'none';
     videoFile.controls.style.display = 'flex';
 
@@ -111,8 +118,7 @@ function startSession() {
   // Espelha a câmera ao vivo (efeito "espelho", como o usuário se vê
   // na tela) — mas não um vídeo de arquivo carregado, cujo lado
   // esquerdo/direito já é o real e não deve ser invertido.
-  stage.video.classList.toggle('flipped', !state.isVideoFileMode);
-  stage.overlayCanvas.classList.toggle('flipped', !state.isVideoFileMode);
+  setMirrored(!state.isVideoFileMode);
 
   stage.overlayCanvas.width = stage.video.videoWidth || 640;
   stage.overlayCanvas.height = stage.video.videoHeight || 480;
@@ -206,16 +212,9 @@ export function bindCaptureControls() {
   });
   if (controls.flipCamBtn) {
     controls.flipCamBtn.addEventListener('click', () => {
-      const isCurrentlyFlipped = !stage.video.classList.contains('unflipped');
-      if (isCurrentlyFlipped) {
-        stage.video.classList.add('unflipped');
-        stage.video.classList.remove('flipped');
-        showToast('Espelhamento desativado', '🪞');
-      } else {
-        stage.video.classList.remove('unflipped');
-        stage.video.classList.add('flipped');
-        showToast('Espelhamento ativado', '🪞');
-      }
+      const nowMirrored = !stage.video.classList.contains('flipped');
+      setMirrored(nowMirrored);
+      showToast(nowMirrored ? 'Espelhamento ativado' : 'Espelhamento desativado', '🪞');
     });
   }
 }
