@@ -68,6 +68,7 @@
           <button class="btn btn-secondary"><span>📁</span> Carregar Vídeo (MP4)</button>
           <input type="file" id="videoFileInput" accept="video/mp4,video/webm,video/quicktime">
         </div>
+        <button id="flipCamBtn" class="btn btn-secondary" style="display:none;" title="Espelhar Câmera"><span>🪞</span> Espelhar Câmera</button>
         <button id="recordVideoBtn" class="btn btn-record" style="display:none;"><span>🔴</span> Gravar Vídeo HUD</button>
         <button id="stopBtn" class="btn btn-danger" style="display:none;"><span>⏹</span> Encerrar Sessão</button>
       </div>
@@ -104,7 +105,7 @@
             </div>
           </div>
 
-          <video id="videoElement" playsinline style="display:none;"></video>
+          <video id="videoElement" class="flipped" playsinline style="display:none;"></video>
           <canvas id="overlayCanvas" class="overlay-canvas"></canvas>
 
           <div class="rest-overlay" id="restOverlay" style="display:none;">

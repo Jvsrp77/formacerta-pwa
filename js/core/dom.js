@@ -30,6 +30,7 @@ export const controls = {
   modeTabs: byId('modeTabs'),
   startCamBtn: byId('startCamBtn'),
   videoFileInput: byId('videoFileInput'),
+  flipCamBtn: byId('flipCamBtn'),
   recordVideoBtn: byId('recordVideoBtn'),
   stopBtn: byId('stopBtn')
 };
