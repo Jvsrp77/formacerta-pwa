@@ -16,7 +16,7 @@ const ctx = canvas.getContext('2d');
 
 /** Ajusta o canvas à resolução real do vídeo, se ela mudou. */
 export function syncOverlaySize() {
-  if (canvas.width !== stage.video.videoWidth) {
+  if (canvas.width !== stage.video.videoWidth || canvas.height !== stage.video.videoHeight) {
     canvas.width = stage.video.videoWidth;
     canvas.height = stage.video.videoHeight;
   }
@@ -80,14 +80,19 @@ export function drawAngleBadge(pB, angleValue) {
   ctx.font = '700 14px "JetBrains Mono", monospace';
   const textWidth = ctx.measureText(label).width;
 
+  let badgeX = bx + 12;
+  if (badgeX + textWidth + 16 > w) {
+    badgeX = bx - textWidth - 28;
+  }
+
   ctx.fillStyle = HUD_COLORS.panel;
   ctx.beginPath();
-  ctx.roundRect(bx + 12, by - 16, textWidth + 16, 26, 6);
+  ctx.roundRect(badgeX, by - 16, textWidth + 16, 26, 6);
   ctx.fill();
   ctx.strokeStyle = HUD_COLORS.pivot;
   ctx.lineWidth = 1;
   ctx.stroke();
 
   ctx.fillStyle = HUD_COLORS.pivot;
-  ctx.fillText(label, bx + 20, by + 2);
+  ctx.fillText(label, badgeX + 8, by + 2);
 }

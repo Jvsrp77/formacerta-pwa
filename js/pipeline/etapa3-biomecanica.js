@@ -44,20 +44,66 @@ import {
 export function analisarBiomecanica(landmarks) {
   const exercise = state.currentExercise;
 
-  const pA = landmarks[exercise.points.a];
-  const pB = landmarks[exercise.points.b];
-  const pC = landmarks[exercise.points.c];
-  if (!pA || !pB || !pC) return null;
+  const rightPts = exercise.rightPoints || exercise.points;
+  const leftPts = exercise.leftPoints;
+
+  const rightA = rightPts && landmarks[rightPts.a];
+  const rightB = rightPts && landmarks[rightPts.b];
+  const rightC = rightPts && landmarks[rightPts.c];
+  const hasRight = Boolean(rightA && rightB && rightC);
+
+  const leftA = leftPts && landmarks[leftPts.a];
+  const leftB = leftPts && landmarks[leftPts.b];
+  const leftC = leftPts && landmarks[leftPts.c];
+  const hasLeft = Boolean(leftA && leftB && leftC);
+
+  if (!hasRight && !hasLeft) return null;
+
+  let chosenSide = 'right';
+
+  if (hasRight && !hasLeft) {
+    chosenSide = 'right';
+  } else if (!hasRight && hasLeft) {
+    chosenSide = 'left';
+  } else {
+    const angleRight = calculateAngle(rightA, rightB, rightC);
+    const angleLeft = calculateAngle(leftA, leftB, leftC);
+
+    const standing = exercise.standing || 150;
+    const inverted = exercise.direction === 'up';
+
+    const devRight = inverted ? Math.max(0, angleRight - standing) : Math.max(0, standing - angleRight);
+    const devLeft = inverted ? Math.max(0, angleLeft - standing) : Math.max(0, standing - angleLeft);
+
+    // Se já iniciou o esforço de uma repetição, trava no mesmo lado até concluir a rep
+    if (state.repPhase === 'down' && state.activeSide) {
+      chosenSide = state.activeSide === 'left' ? 'left' : 'right';
+    } else if (Math.abs(devRight - devLeft) > 10) {
+      // Prioriza o lado que está realizando movimento ativo
+      chosenSide = devRight > devLeft ? 'right' : 'left';
+    } else {
+      // Quando ambos em repouso/simétricos, seleciona o lado mais voltado/próximo da câmera (menor Z)
+      const zRight = ((rightA.z || 0) + (rightB.z || 0) + (rightC.z || 0)) / 3;
+      const zLeft = ((leftA.z || 0) + (leftB.z || 0) + (leftC.z || 0)) / 3;
+      chosenSide = zRight <= zLeft ? 'right' : 'left';
+    }
+  }
+
+  state.activeSide = chosenSide;
+
+  const pA = chosenSide === 'left' ? leftA : rightA;
+  const pB = chosenSide === 'left' ? leftB : rightB;
+  const pC = chosenSide === 'left' ? leftC : rightC;
 
   const angle = calculateAngle(pA, pB, pC);
   const roundedAngle = Math.round(angle);
 
   const velocity = calcularVelocidadeAngular(roundedAngle);
-  const secondary = calcularAnguloSecundario(landmarks);
+  const secondary = calcularAnguloSecundario(landmarks, chosenSide);
 
   registrarNaTrajetoria(roundedAngle);
 
-  return { pA, pB, pC, angle, roundedAngle, secondary, ...velocity };
+  return { pA, pB, pC, angle, roundedAngle, secondary, side: chosenSide, ...velocity };
 }
 
 /* ---------------------------------------------------------------
@@ -101,16 +147,22 @@ function calcularVelocidadeAngular(roundedAngle) {
    3.b — Ângulo secundário (tronco, coluna, ombro)
    Base para a checagem de desvio postural da ETAPA 4.
    --------------------------------------------------------------- */
-function calcularAnguloSecundario(landmarks) {
+function calcularAnguloSecundario(landmarks, chosenSide = 'right') {
   const exercise = state.currentExercise;
-  if (!exercise.secondary || !settings.multiAngleToggle.checked) return null;
+  if (!settings.multiAngleToggle.checked) return null;
 
-  const sA = landmarks[exercise.secondary.a];
-  const sB = landmarks[exercise.secondary.b];
-  const sC = landmarks[exercise.secondary.c];
+  const sec = chosenSide === 'left'
+    ? (exercise.leftSecondary || exercise.secondary)
+    : (exercise.rightSecondary || exercise.secondary);
+
+  if (!sec) return null;
+
+  const sA = landmarks[sec.a];
+  const sB = landmarks[sec.b];
+  const sC = landmarks[sec.c];
   if (!sA || !sB || !sC) return null;
 
-  return { angle: calculateAngle(sA, sB, sC), name: exercise.secondary.name };
+  return { angle: calculateAngle(sA, sB, sC), name: sec.name };
 }
 
 /* ---------------------------------------------------------------
