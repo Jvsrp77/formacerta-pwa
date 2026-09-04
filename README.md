@@ -2,7 +2,7 @@
 
 Sistema web (PWA) de análise biomecânica de exercícios físicos em tempo real, usando detecção de pose por visão computacional direto no navegador — sem sensores vestíveis, sem servidor.
 
-Projeto de TCC — Engenharia da Computação.
+Projeto de Engenharia da Computação.
 
 ## Funcionalidades
 
